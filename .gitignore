@@ -101,4 +101,8 @@ ENV/
 .mypy_cache/
 
 #perl
-perl/
+Perl/
+
+#idea pycharm
+.idea
+.idea/
