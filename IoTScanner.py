@@ -1,10 +1,9 @@
 import sys, getopt
 import json
-import re
 
-from PortScanner import PortScanner
-from CheckIoTDevice import CheckIoTDevice
-from IPHandler import IPHandler
+import PortScanner
+import CheckIoTDevice
+import IPHandler
 
 def main(argv):
     ipAddressesString = ''
@@ -32,18 +31,15 @@ def main(argv):
         print("Could not find devices configuration.")
         sys.exit(2)
     if ipAddressesString != "":
-        ipHandler = IPHandler()
-        ipList = ipHandler.getIPList(ipAddressesString)
+        ipList = IPHandler.getIPList(ipAddressesString)
     else:
         print("Could not find any ip addresses.")
         sys.exit(2)
     if ipList.__len__() != 0:
-        portScanner = PortScanner()
-        checker = CheckIoTDevice(devices)
         for ip in ipList:
-            scanResults = portScanner.scanPorts(ip)
+            scanResults = PortScanner.scanPorts(ip)
             if scanResults:
-                checker.check(ip, scanResults)
+                CheckIoTDevice.check(ip, scanResults, devices)
     else:
         print("IP list is empty.")
         sys.exit(2)
