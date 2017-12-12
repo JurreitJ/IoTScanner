@@ -77,7 +77,7 @@ def doScan(zbdb, currentGPS, verbose=False, dblog=False, agressive=False, stayti
     print('Network discovery device is %s' % (scannerDevId))
     zbdb.update_devices_status(scannerDevId, 'Discovery')
 
-    # Much of this code adapted from killerbee/tools/zbstumbler:main
+    # Much of this code adapted from killerbee/tools/zbstumbler.py:main
     # Could build this with Scapy but keeping manual construction for performance
     beacon = "\x03\x08\x00\xff\xff\xff\xff\x07" #beacon frame
     beaconp1 = beacon[0:2]  #beacon part before seqnum field

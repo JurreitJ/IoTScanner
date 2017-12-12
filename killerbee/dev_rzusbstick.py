@@ -4,7 +4,7 @@ try:
     import usb.util
     USBVER=1
     import sys
-    print("Warning: You are using pyUSB 1.x, support is in beta.", file=sys.stderr)
+    print("Warning: You are using pyUSB 1.x, support is in beta.")
 except ImportError:
     import usb
     #print("Warning: You are using pyUSB 0.x, future deprecation planned.")
