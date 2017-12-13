@@ -42,6 +42,7 @@ def checkLogin(URL, devType):
                 else:
                     print("Device with url", URL, "doesn't use standard login credentials.")
         elif devType['auth']['type'] == "basic":
+            #copied from ... TODO: Quelle
             # create a password manager
             password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
 
