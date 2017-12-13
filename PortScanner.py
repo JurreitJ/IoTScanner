@@ -4,7 +4,7 @@ import nmap
 def scanPorts(ip):
     openPorts = dict()
     scanner = nmap.PortScanner()
-    scanner.scan(ip, arguments="-sT") # max port 65535
+    scanner.scan(ip, arguments="-Pn") # max port 65535
     if scanner.all_hosts().__len__() == 0:
         print("Could not find any hosts at ip:", ip)
     else:

@@ -1,14 +1,23 @@
 import DeviceIdentifier
 import Fetcher
 import CheckLogin
+import sshcheck
 
 
 def check(ip, scanResults, devices):
+    #TODO: Programm springt aus der Schleife, nach Überprüfung von HTTP;
     for port in scanResults.keys():
-        if scanResults[port] == 'http':
+        print(port)
+        if scanResults[port] == 'ssh':
+            loginPossible = False
+            for login in devices['ssh']:
+                loginPossible = sshcheck.sshcheck(ip, port, devices['ssh'][login]['username'], devices['ssh'][login]['password'])
+                if loginPossible:
+                    break
+            if not loginPossible :
+                print("Could not log into ssh with any default password.")
+        elif scanResults[port] == 'http':
             URL = composeURL(ip, port)
-            numOfResults = -1
-            results = list(dict())
             response = Fetcher.fetch(URL)
             if type(response) is int:
                 if response == 401:
@@ -24,14 +33,13 @@ def check(ip, scanResults, devices):
                 devType = DeviceIdentifier.searchForDevType(response, devices)
                 if not devType:
                     print("No matching device found.")
-                    exit(0)
                 else:
                     return CheckLogin.checkLogin(URL, devType)
             else:
                 print("unexpected response: ", response)
         else:
-            print("Could not check port", port, ", because no http service is running. Service is:", scanResults[port])
-            #TODO: check other connections; e.g. HTTPS, FTP
+            print("Could not check port", port, ", because the service is not supported. Service is:", scanResults[port])
+
 
 def composeURL(ip, port):
     portStr = str(port)
