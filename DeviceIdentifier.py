@@ -1,46 +1,48 @@
-from bs4 import BeautifulSoup
 import re
 import sys
 
-def searchForDevType(response, devices):
+from bs4 import BeautifulSoup
+
+
+def search_for_devtype(response, devices):
     html = str(response.read())
     soup = BeautifulSoup(html, 'lxml')
     if bool(devices):
         for device in devices["http"].keys():
-            devTypePattern = devices["http"][device]['devTypePattern']
-            if "head" in devTypePattern.keys():
-                if devTypePattern['head']['tag'] == "title":
-                    if devTypePattern['head']['pattern'][0] == "==":
-                        if soup.title.string == devTypePattern['head']['pattern'][1]:
+            devtype_pattern = devices["http"][device]['devTypePattern']
+            if "head" in devtype_pattern.keys():
+                if devtype_pattern['head']['tag'] == "title":
+                    if devtype_pattern['head']['pattern'][0] == "==":
+                        if soup.title.string == devtype_pattern['head']['pattern'][1]:
                             print("device found:", device)
                             return devices["http"][device]
-                    elif devTypePattern['head']['pattern'][0] == "regex":
-                        if re.match(devTypePattern['head']['pattern'][1], soup.title.string):
+                    elif devtype_pattern['head']['pattern'][0] == "regex":
+                        if re.match(devtype_pattern['head']['pattern'][1], soup.title.string):
                             print("device found:", device)
                             return devices["http"][device]
-                elif devTypePattern['head']['tag'] == "meta":
-                    if devTypePattern['head']['pattern'][0] == "==":
+                elif devtype_pattern['head']['tag'] == "meta":
+                    if devtype_pattern['head']['pattern'][0] == "==":
                         for meta in soup.find_all('meta'):
-                            if meta == devTypePattern['head']['pattern'][1]:
+                            if meta == devtype_pattern['head']['pattern'][1]:
                                 print("device found:", device)
                                 return devices["http"][device]
-                    elif devTypePattern['head']['pattern'][0] == "regex":
+                    elif devtype_pattern['head']['pattern'][0] == "regex":
                         for meta in soup.find_all('meta'):
-                            if re.match(devTypePattern['head']['pattern'][1], meta):
+                            if re.match(devtype_pattern['head']['pattern'][1], meta):
                                 print("device found:", device)
                                 return devices["http"][device]
-            elif "body" in devTypePattern.keys():
-                if devTypePattern['body']['tag'] != "":
-                    for pattern in soup.find_all(devTypePattern['body']['tag']):
-                        if re.match(devTypePattern['body']['pattern'][0], pattern):
+            elif "body" in devtype_pattern.keys():
+                if devtype_pattern['body']['tag'] != "":
+                    for pattern in soup.find_all(devtype_pattern['body']['tag']):
+                        if re.match(devtype_pattern['body']['pattern'][0], pattern):
                             print("device found:", device)
                             return devices["http"][device]
                 else:
-                    if re.match(devTypePattern['body']['pattern'][0], html):
+                    if re.match(devtype_pattern['body']['pattern'][0], html):
                         print("device found:", device)
                         return devices["http"][device]
 
-            elif "header" in devTypePattern.keys():
+            elif "header" in devtype_pattern.keys():
                 print("Devtype requires matching header field.")
                 # TODO: Check for matching header fields.
     else:

@@ -1,5 +1,6 @@
 import urllib.request
 
+
 def fetch(url):
     try:
         response = urllib.request.urlopen(url)

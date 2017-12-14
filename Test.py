@@ -1,22 +1,23 @@
-from bs4 import BeautifulSoup
 import urllib.request
-import urllib.parse
-import json
+import urllib.request
+
 import paramiko.client
+
 
 def main():
     getHTML()
 
     client = paramiko.client.SSHClient()
-    #client.connect("test.de", 22, "test", "test")
+    # client.connect("test.de", 22, "test", "test")
 
 
 def getHTML():
     URL = "http://127.0.0.1:80/loginpost.php"
     html = fetch(URL)
     print(html)
-    #soup = BeautifulSoup(html, 'lxml')
-    #print(soup.prettify())
+    # soup = BeautifulSoup(html, 'lxml')
+    # print(soup.prettify())
+
 
 def fetch(url):
     details = urllib.parse. \
@@ -42,5 +43,3 @@ def fetch(url):
 
 if __name__ == '__main__':
     main()
-
-

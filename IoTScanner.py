@@ -1,60 +1,60 @@
-import sys, getopt
+import getopt
 import json
+import sys
 
-import PortScanner
 import CheckIoTDevice
 import IPHandler
+import PortScanner
+
 
 def main(argv):
-    ipAddressesString = ''
-    devConfigInput = ''
+    ip_addresses_string = ''
+    dev_config_input = ''
     devices = dict()
 
     try:
-        opts, args = getopt.getopt(argv,"hi:c:",["ip=","devCfg="])
+        opts, args = getopt.getopt(argv, "hi:c:", ["ip=", "devCfg="])
     except getopt.GetoptError:
-        print ('IoTScanner.py -i <ipAddresses> -c <config file>')
+        print('IoTScanner.py -i <ipAddresses> -c <config file>')
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print ('IoTScanner.py -i <ipAddresses> -c <config file>')
+            print('IoTScanner.py -i <ipAddresses> -c <config file>')
             sys.exit(0)
         elif opt in ("-i", "--ip"):
-            ipAddressesString = arg
+            ip_addresses_string = arg
         elif opt in ("-c", "--devCfg"):
-            devConfigInput = arg
-    print ('IPs are', ipAddressesString)
-    print ('Config file is', devConfigInput)
-    if devConfigInput != "":
-       devices = readDevices(devConfigInput)
+            dev_config_input = arg
+    print('IPs are', ip_addresses_string)
+    print('Config file is', dev_config_input)
+    if dev_config_input != "":
+        devices = read_devices(dev_config_input)
     else:
         print("Could not find devices configuration.")
         sys.exit(2)
-    if ipAddressesString != "":
-        ipList = IPHandler.getIPList(ipAddressesString)
+    if ip_addresses_string != "":
+        ip_list = IPHandler.get_ip_list(ip_addresses_string)
     else:
         print("Could not find any ip addresses.")
         sys.exit(2)
-    if ipList.__len__() != 0:
-        for ip in ipList:
-            scanResults = PortScanner.scanPorts(ip)
-            if scanResults:
-                CheckIoTDevice.check(ip, scanResults, devices)
+    if ip_list.__len__() != 0:
+        for ip in ip_list:
+            scan_results = PortScanner.scan_ports(ip)
+            if scan_results:
+                CheckIoTDevice.check(ip, scan_results, devices)
     else:
         print("IP list is empty.")
         sys.exit(2)
 
 
-def readDevices(devConfigInput):
+def read_devices(dev_config_input):
     try:
-        with open(devConfigInput) as devConfigFile:
+        with open(dev_config_input) as devConfigFile:
             return json.load(devConfigFile)
     except:
         print("Could not load devices.")
         sys.exit(2)
 
 
-
-
 if __name__ == "__main__":
-   main(sys.argv[1:])
+    main(sys.argv[1:])

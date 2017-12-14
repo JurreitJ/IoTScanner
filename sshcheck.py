@@ -1,17 +1,18 @@
 import paramiko
 
+
 def sshcheck(host, port, username, password):
-    loginPossible = False
+    login_possible = False
     ssh = paramiko.SSHClient()
-    #TODO: handle host keys; do not simply accept everyone
+    # TODO: handle host keys; do not simply accept everyone
     ssh.set_missing_host_key_policy(
-    paramiko.AutoAddPolicy())
+        paramiko.AutoAddPolicy())
 
     try:
         ssh.connect(host, port, username, password)
-        loginPossible = True
+        login_possible = True
         print("SSH login with standard password", password)
     except Exception as e:
         print(e)
     ssh.close()
-    return loginPossible
+    return login_possible
