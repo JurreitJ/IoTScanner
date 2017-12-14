@@ -1,7 +1,7 @@
 import CheckLogin
 import DeviceIdentifier
 import Fetcher
-import sshcheck
+import SSHCheck
 
 
 def check(ip, scanresults, devices):
@@ -11,7 +11,7 @@ def check(ip, scanresults, devices):
         if scanresults[port] == 'ssh':
             login_possible = False
             for login in devices['ssh']:
-                login_possible = sshcheck.sshcheck(ip, port, devices['ssh'][login]['username'],
+                login_possible = SSHCheck.sshcheck(ip, port, devices['ssh'][login]['username'],
                                                    devices['ssh'][login]['password'])
                 if login_possible:
                     break
