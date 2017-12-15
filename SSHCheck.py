@@ -1,7 +1,7 @@
 import paramiko
 
 
-def sshcheck(host, port, username, password):
+def ssh_check(host, port, username, password):
     login_possible = False
     ssh = paramiko.SSHClient()
     # TODO: handle host keys; do not simply accept everyone

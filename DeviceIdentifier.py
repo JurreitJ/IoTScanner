@@ -12,14 +12,16 @@ def search_for_devtype(response, devices):
             devtype_pattern = devices["http"][device]['devTypePattern']
             if "head" in devtype_pattern.keys():
                 if devtype_pattern['head']['tag'] == "title":
-                    if devtype_pattern['head']['pattern'][0] == "==":
-                        if soup.title.string == devtype_pattern['head']['pattern'][1]:
-                            print("device found:", device)
-                            return devices["http"][device]
-                    elif devtype_pattern['head']['pattern'][0] == "regex":
-                        if re.match(devtype_pattern['head']['pattern'][1], soup.title.string):
-                            print("device found:", device)
-                            return devices["http"][device]
+                    if (devtype_pattern['head']['pattern'][0] == "==") \
+                            and \
+                            (soup.title.string == devtype_pattern['head']['pattern'][1]):
+                        print("device found:", device)
+                        return devices["http"][device]
+                    elif devtype_pattern['head']['pattern'][0] == "regex" \
+                            and \
+                            re.match(devtype_pattern['head']['pattern'][1], soup.title.string):
+                        print("device found:", device)
+                        return devices["http"][device]
                 elif devtype_pattern['head']['tag'] == "meta":
                     if devtype_pattern['head']['pattern'][0] == "==":
                         for meta in soup.find_all('meta'):

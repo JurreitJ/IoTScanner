@@ -11,8 +11,8 @@ def check(ip, scanresults, devices):
         if scanresults[port] == 'ssh':
             login_possible = False
             for login in devices['ssh']:
-                login_possible = SSHCheck.sshcheck(ip, port, devices['ssh'][login]['username'],
-                                                   devices['ssh'][login]['password'])
+                login_possible = SSHCheck.ssh_check(ip, port, devices['ssh'][login]['username'],
+                                                    devices['ssh'][login]['password'])
                 if login_possible:
                     break
             if not login_possible:

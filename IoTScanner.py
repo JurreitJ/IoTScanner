@@ -10,7 +10,6 @@ import PortScanner
 def main(argv):
     ip_addresses_string = ''
     dev_config_input = ''
-    devices = dict()
 
     try:
         opts, args = getopt.getopt(argv, "hi:c:", ["ip=", "devCfg="])
@@ -34,16 +33,12 @@ def main(argv):
         sys.exit(2)
     if ip_addresses_string != "":
         ip_list = IPHandler.get_ip_list(ip_addresses_string)
-    else:
-        print("Could not find any ip addresses.")
-        sys.exit(2)
-    if ip_list.__len__() != 0:
         for ip in ip_list:
             scan_results = PortScanner.scan_ports(ip)
             if scan_results:
                 CheckIoTDevice.check(ip, scan_results, devices)
     else:
-        print("IP list is empty.")
+        print("Could not find any ip addresses.")
         sys.exit(2)
 
 
@@ -51,7 +46,7 @@ def read_devices(dev_config_input):
     try:
         with open(dev_config_input) as devConfigFile:
             return json.load(devConfigFile)
-    except:
+    except json.decoder.JSONDecodeError:
         print("Could not load devices.")
         sys.exit(2)
 
