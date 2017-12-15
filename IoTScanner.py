@@ -4,10 +4,10 @@ and zigbee vulnerabilities in IoT devices
 """
 
 import getopt
-import json
 import sys
 
-import CheckIoTDevice
+import DeviceCheck
+import DeviceManager
 import IPHandler
 import PortScanner
 
@@ -32,7 +32,7 @@ def main(argv):
     print('IPs are', ip_addresses_string)
     print('Config file is', dev_config_input)
     if dev_config_input != "":
-        devices = read_devices(dev_config_input)
+        devices = DeviceManager.read_devices(dev_config_input)
     else:
         print("Could not find devices configuration.")
         sys.exit(2)
@@ -41,19 +41,12 @@ def main(argv):
         for ip in ip_list:
             scan_results = PortScanner.scan_ports(ip)
             if scan_results:
-                CheckIoTDevice.check(ip, scan_results, devices)
+                DeviceCheck.check(ip, scan_results, devices)
     else:
         print("Could not find any ip addresses.")
         sys.exit(2)
 
 
-def read_devices(dev_config_input):
-    try:
-        with open(dev_config_input) as devConfigFile:
-            return json.load(devConfigFile)
-    except json.decoder.JSONDecodeError:
-        print("Could not load devices.")
-        sys.exit(2)
 
 
 if __name__ == "__main__":
