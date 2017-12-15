@@ -1,3 +1,7 @@
+"""
+Functions to handle and convert IP addresses
+"""
+
 import re
 
 import netaddr

@@ -1,3 +1,7 @@
+"""
+Checks if basic or form login with the provided credentials is valid
+"""
+
 import urllib.parse
 import urllib.request
 

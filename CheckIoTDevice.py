@@ -1,3 +1,9 @@
+"""
+Identifies IoT devices, using the given ip address,
+and checks, whether the program can connect to a web server
+or ssh server, using known standard credentials
+"""
+
 import CheckLogin
 import DeviceIdentifier
 import Fetcher
@@ -6,6 +12,7 @@ import SSHCheck
 
 def check(ip, scanresults, devices):
     # TODO: Programm springt aus der Schleife, nach Überprüfung von HTTP;
+    # TODO: Use lambdas;
     for port in scanresults.keys():
         print(port)
         if scanresults[port] == 'ssh':
@@ -23,7 +30,7 @@ def check(ip, scanresults, devices):
             if type(response) is int:
                 if response == 401:
                     devtype = DeviceIdentifier.search_for_devtype(response, devices)
-                    # return checkLogin.checkLogin(URL, devType)
+                    return CheckLogin.check_login(url, devtype)
                 elif response == 404:
                     print("cannot find dev type for ", url, " due to 404 response.")
                 elif response == 595:

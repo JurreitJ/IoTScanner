@@ -1,3 +1,8 @@
+"""
+Searches for web and ssh servers with default passwords
+and zigbee vulnerabilities in IoT devices
+"""
+
 import getopt
 import json
 import sys

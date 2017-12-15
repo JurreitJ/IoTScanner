@@ -1,3 +1,7 @@
+"""
+Fetches http responses from the given url
+"""
+
 import urllib.request
 
 

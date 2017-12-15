@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 
 
 def search_for_devtype(response, devices):
+    # TODO: Lambdas?
     html = str(response.read())
     soup = BeautifulSoup(html, 'lxml')
     if bool(devices):

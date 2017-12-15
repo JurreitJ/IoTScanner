@@ -1,3 +1,8 @@
+"""
+Functions to check, whether an ssh connection can be established,
+using the given address and credentials
+"""
+
 import paramiko
 
 

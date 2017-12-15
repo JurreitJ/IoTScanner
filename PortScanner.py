@@ -1,3 +1,7 @@
+"""
+Functions to scan tcp ports, using nmap
+"""
+
 import nmap
 
 
