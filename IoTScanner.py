@@ -6,8 +6,8 @@ and zigbee vulnerabilities in IoT devices
 import getopt
 import sys
 
+import DataManager
 import DeviceCheck
-import DeviceManager
 import IPHandler
 import PortScanner
 
@@ -32,7 +32,7 @@ def main(argv):
     print('IPs are', ip_addresses_string)
     print('Config file is', dev_config_input)
     if dev_config_input != "":
-        devices = DeviceManager.read_devices(dev_config_input)
+        devices = DataManager.read_devices(dev_config_input)
     else:
         print("Could not find devices configuration.")
         sys.exit(2)
@@ -45,8 +45,6 @@ def main(argv):
     else:
         print("Could not find any ip addresses.")
         sys.exit(2)
-
-
 
 
 if __name__ == "__main__":

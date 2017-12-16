@@ -1,12 +1,11 @@
 """
-Identifies IoT devices, using the given ip address,
-and checks, whether the program can connect to a web server
+Checks, whether the program can connect to a web server
 or ssh server, using known standard credentials
 """
 
-import HTTPCheck
 import HTTPHandler
 import SSHCheck
+from HTTPCheck import HTTPCheck
 
 
 def check(ip, scanresults, devices):
@@ -26,24 +25,13 @@ def check(ip, scanresults, devices):
         elif scanresults[port] == 'http':
             url = HTTPHandler.compose_url(ip, port)
             response = HTTPHandler.fetch(url)
-            if type(response) is int:
-                if response == 401:
-                    devtype = HTTPCheck.search_for_devtype(response, devices)
-                    return HTTPCheck.check_login(url, devtype)
-                elif response == 404:
-                    print("cannot find dev type for ", url, " due to 404 response.")
-                elif response == 595:
-                    print("device ", url, ": failed to establish TCP connection.")
-                else:
-                    print("unexpected status code:", response)
-            elif response.getcode() == 200:
-                devtype = HTTPCheck.search_for_devtype(response, devices)
+            http_check = HTTPCheck(devices, url)
+            if http_check.check_availability(response):
+                devtype = http_check.search_for_devtype(response)
                 if not devtype:
                     print("No matching device found.")
                 else:
-                    return HTTPCheck.check_login(url, devtype)
-            else:
-                print("unexpected response: ", response)
+                    return http_check.check_login(devtype)
         else:
             print("Could not check port", port, ", because the service is not supported. Service is:",
                   scanresults[port])
