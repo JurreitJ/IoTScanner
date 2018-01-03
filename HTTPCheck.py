@@ -4,7 +4,6 @@ Functions to check devices, using http
 
 import re
 import sys
-import urllib.parse
 import urllib.request
 
 from bs4 import BeautifulSoup
@@ -24,22 +23,42 @@ class HTTPCheck:
     __password = None
     __credentials_keys = None
     __next_url = None
+    __header_tag = None
+    __header_pattern = None
+    __header_comparison_operator = None
 
     def __init__(self, devices, url):
         self.devices = devices
         self.url = url
 
     def search_for_devtype(self, response):
-        # TODO: Lambdas?
         html = str(response.read())
+        headers = response.info()
         soup = BeautifulSoup(html, 'lxml')
         if bool(self.devices):
             for device in self.devices["http"].keys():
                 self.get_data(device)
-                self.__html_position = DataManager.retrieve_html_position(device)
                 if self.__html_position == "header":
-                    pass
-                    # TODO: Match header fields
+                    device_found = None
+                    self.__header_tag = DataManager.retrieve_header_tag(self.__devtype_pattern)
+                    self.__header_comparison_operator = DataManager.retrieve_header_comparison_operator(
+                        self.__devtype_pattern)
+                    self.__header_pattern = DataManager.retrieve_header_pattern(self.__devtype_pattern)
+                    for header in headers:
+                        if self.__header_comparison_operator == "==" \
+                                and \
+                                        header[self.__header_tag] == self.__header_pattern:
+                            print("device found:", device)
+                            device_found = self.devices["http"][device]
+                        elif self.__header_comparison_operator == "regex" \
+                                and \
+                                re.match(self.__header_pattern, header[self.__header_tag]):
+                            print("device found:", device)
+                            device_found = self.devices["http"][device]
+                    if device_found:
+                        return device_found
+                    else:
+                        print("couldn't find any device with matching header field.")
                 else:
                     if self.__tag_name == "title":
                         if (self.__comparison_operator == "==") \
@@ -63,9 +82,9 @@ class HTTPCheck:
                                 if re.match(self.__comparison_pattern, meta):
                                     print("device found:", device)
                                     return self.devices["http"][device]
-                    if self.__tag_name != "":
+                    elif self.__tag_name != "" and self.__tag_name != None:
                         for pattern in soup.find_all(self.__tag_name):
-                            if re.match(self.__comparison_pattern, pattern):
+                            if re.match(self.__comparison_pattern, str(pattern)):
                                 print("device found:", device)
                                 return self.devices["http"][device]
                     else:
@@ -83,32 +102,14 @@ class HTTPCheck:
                 new_url = self.url + self.__next_url + "?" \
                           + list(self.__credentials_keys)[0] + "=" + self.__username \
                           + list(self.__credentials_keys)[1] + "=" + self.__password
-                # print("new url:", newURL)
                 response = HTTPHandler.fetch(new_url)
-                # print(response)
                 if type(response) is not int:
                     status = response.getcode()
                     self.check_status(status)
                 else:
                     # if get fails, try post
-                    details = urllib.parse. \
-                        urlencode({'username': self.__username,
-                                   'password': self.__password})
-                    details = details.encode('UTF-8')
                     new_url = self.url + self.__next_url
-                    url = urllib.request.Request(
-                        new_url,
-                        details)
-                    url.add_header("User-Agent",
-                                   "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US)"
-                                   " AppleWebKit/525.13 (KHTML, like Gecko)"
-                                   " Chrome/0.2.149.29 Safari/525.13")
-
-                    try:
-                        response_data = urllib.request.urlopen(url)
-                        status = response_data.getcode()
-                    except urllib.request.HTTPError as e:
-                        status = e.code
+                    status = HTTPHandler.fetch_via_post(new_url, self.__username, self.__password)
                     self.check_status(status)
             elif self.__auth_type == "basic":
                 password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
@@ -153,11 +154,15 @@ class HTTPCheck:
             print("unexpected response: ", response)
             return False
 
-    def get_data(self, device):
-        self.__devtype_pattern = DataManager.retrieve_device_pattern(self.devices, device)
+    def get_data(self, index):
+        device = self.devices["http"][index]
+        self.__devtype_pattern = DataManager.retrieve_device_pattern(device)
+        self.__html_position = DataManager.retrieve_html_position(self.__devtype_pattern)
         self.__tag_name = DataManager.retrieve_tag(self.__devtype_pattern, self.__html_position)
         self.__comparison_operator = DataManager.retrieve_comparison_operator(self.__devtype_pattern,
                                                                               self.__html_position)
+        self.__comparison_pattern = DataManager.retrieve_comparison_pattern(self.__devtype_pattern,
+                                                                            self.__html_position)
         self.__auth_type = DataManager.retrieve_auth_type(device)
         self.__credentials_keys = DataManager.retrieve_credentials_keys(device)
         self.__username = DataManager.retrieve_username(device)
