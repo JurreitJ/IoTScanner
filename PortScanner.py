@@ -16,10 +16,10 @@ def scan_ports(ip):
         if host_state == "up":
             ports = scanner[ip]['tcp'].keys()
             for port in ports:
-                port_state = scanner[ip]['tcp'][port]['state']
-                if port_state == 'open':
+                port_dict = scanner[ip]['tcp'][port]
+                if port_dict['state'] == 'open':
                     print("Port ", port, " is open.")
-                    service = scanner[ip]['tcp'][port]['name']
+                    service = port_dict['name']
                     if service == 'http':
                         open_ports[port] = 'http'
                     elif service == 'http-proxy':
@@ -31,7 +31,7 @@ def scan_ports(ip):
                     else:
                         open_ports[port] = str(service)
                 else:
-                    print("Port ", port, " is ", port_state)
+                    print("Port ", port, " is ", port_dict['state'])
             if not open_ports:
                 print("Could not find any open ports for host at ", ip)
         else:
