@@ -1,35 +1,39 @@
+"""
+Functions to scan tcp ports, using nmap
+"""
+
 import nmap
 
 
-def scanPorts(ip):
-    openPorts = dict()
+def scan_ports(ip):
+    open_ports = dict()
     scanner = nmap.PortScanner()
-    scanner.scan(ip, arguments="-Pn") # max port 65535
+    scanner.scan(ip, arguments="-Pn")  # max port 65535
     if scanner.all_hosts().__len__() == 0:
         print("Could not find any hosts at ip:", ip)
     else:
-        hostState = scanner[ip].state()
-        if hostState == "up":
+        host_state = scanner[ip].state()
+        if host_state == "up":
             ports = scanner[ip]['tcp'].keys()
             for port in ports:
-                portState = scanner[ip]['tcp'][port]['state']
-                if portState == 'open':
+                port_dict = scanner[ip]['tcp'][port]
+                if port_dict['state'] == 'open':
                     print("Port ", port, " is open.")
-                    service = scanner[ip]['tcp'][port]['name']
+                    service = port_dict['name']
                     if service == 'http':
-                        openPorts[port] = 'http'
-                    elif  service == 'http-proxy' :
-                        openPorts[port] = 'http'
-                    elif service == 'https' :
-                        openPorts[port] = 'https'
-                    elif  service == 'https-proxy':
-                        openPorts[port] = 'https'
+                        open_ports[port] = 'http'
+                    elif service == 'http-proxy':
+                        open_ports[port] = 'http'
+                    elif service == 'https':
+                        open_ports[port] = 'https'
+                    elif service == 'https-proxy':
+                        open_ports[port] = 'https'
                     else:
-                        openPorts[port] = str(service)
+                        open_ports[port] = str(service)
                 else:
-                    print("Port ", port, " is ", portState)
-            if not openPorts:
+                    print("Port ", port, " is ", port_dict['state'])
+            if not open_ports:
                 print("Could not find any open ports for host at ", ip)
         else:
-            print("Host at ip: ", ip, " is probably down. State is: ", hostState)
-    return openPorts
+            print("Host at ip: ", ip, " is probably down. State is: ", host_state)
+    return open_ports
