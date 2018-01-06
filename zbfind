@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 
 '''
-This tool sends beacon request frames, similar to zbstumbler.py, as it cycles
+This tool sends beacon request frames, similar to ZigBeeDeviceFinder.py, as it cycles
 through the 802.15.4 channels, and uses the responses and other observed 
 packets to display RSSI values to the user for different devices "seen."
 
 This is intended to be used as a tool to locate devices via manual direction-
 finding.
 
-zbstumbler.py will be more actively maintained for eliciting beacon responses,
+ZigBeeDeviceFinder.py will be more actively maintained for eliciting beacon responses,
 and more recent work has been completed demonstrating the ability to 
 use captures to automatically triangulate locations of devices. See:
 http://code.google.com/p/zigbee-security/wiki/PapersAndCoverage
@@ -22,22 +22,11 @@ import gobject
 import pango
 import gtk
 import math
-import time
-import random
-import os
 from threading import Thread, Event
 from gtk import gdk
-import cairo
-import struct
-import socket
-import select
 import datetime
-import time
-import usb
 import traceback
 from killerbee import *
-
-from types import *
 
 if gtk.pygtk_version < (2,3,93):
     print("PyGtk 2.3.93 or later required")
