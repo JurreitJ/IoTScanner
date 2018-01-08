@@ -14,16 +14,16 @@ from killerbee import *
 
 
 class ZigBeeDeviceFinder():
-    def __init__(self, devstring, delay, channel, kb, loops, verbose=False, ignore=False):
+    def __init__(self, devstring, delay, channel, loops, verbose=False, ignore=False):
         self.devstring = devstring
         self.delay = delay
         self.channel = channel
-        self.kb = kb
         self.verbose = verbose
         self.ignore = ignore
         self.txcount = 0
         self.rxcount = 0
         self.loops = loops
+        self.kb = None
 
     def response_handler(self, stumbled, packet, channel):
         d154 = Dot154PacketParser()
@@ -76,18 +76,18 @@ class ZigBeeDeviceFinder():
         beaconp2 = beacon[3:]
 
         try:
-            kb = KillerBee(device=self.devstring)
+            self.kb = KillerBee(device=self.devstring)
         except KBInterfaceError as e:
             print(("Interface Error: {0}".format(e)))
             sys.exit(-1)
 
         signal.signal(signal.SIGINT, self.interrupt)
-        print(("ZigBeeDeviceFinder.py: Transmitting and receiving on interface \'{0}\'".format(kb.get_dev_info()[0])))
+        print(("ZigbeeDeviceFinder.py: Transmitting and receiving on interface \'{0}\'".format(self.kb.get_dev_info()[0])))
 
         # Sequence number of beacon request frame
         seqnum = 0
         if self.channel:
-            kb.set_channel(self.channel)
+            self.kb.set_channel(self.channel)
         else:
             channel = 11
 
@@ -104,7 +104,7 @@ class ZigBeeDeviceFinder():
                 if self.verbose:
                     print(("Setting channel to {0}.".format(channel)))
                 try:
-                    kb.set_channel(channel)
+                    self.kb.set_channel(channel)
                 except Exception as e:
                     print(("ERROR: Failed to set channel to {0}. ({1})".format(channel, e)))
                     sys.exit(-1)
@@ -120,14 +120,14 @@ class ZigBeeDeviceFinder():
 
             try:
                 self.txcount += 1
-                kb.inject(beaconinj)
+                self.kb.inject(beaconinj)
             except Exception as e:
                 print(("ERROR: Unable to inject packet: {0}".format(e)))
                 sys.exit(-1)
 
             while (start + self.delay > time.time()):
                 # Does not block
-                recvpkt = kb.pnext()
+                recvpkt = self.kb.pnext()
                 # Check for empty packet (timeout) and valid FCS
                 if recvpkt != None and recvpkt[1]:
                     self.rxcount += 1
@@ -135,7 +135,7 @@ class ZigBeeDeviceFinder():
                         print("Received frame.")  # , time.time()-start
                     networkdata = self.response_handler(stumbled, recvpkt[0], channel)
 
-            kb.sniffer_off()
+            self.kb.sniffer_off()
             seqnum += 1
             count += 1
             if not channel:
