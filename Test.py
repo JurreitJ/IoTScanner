@@ -3,8 +3,10 @@ File to test new functionalities, before implementing;
 Not Unit tests;
 """
 
-import ZigbeeScanning
+from ZigbeeScanning import ZigbeeScanning
 
-ZigbeeScanning.find_zbdevices()
+zbscanner = ZigbeeScanning()
+zbscanner.sniff_zb()
+
 
 
