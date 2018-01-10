@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 '''
 Transmit beacon request frames to the broadcast address while
 channel hopping to identify ZigBee Coordinator/Router devices.
@@ -14,8 +12,7 @@ from killerbee import *
 
 
 class ZigBeeDeviceFinder():
-    def __init__(self, devstring, delay, channel, loops, verbose=False, ignore=False):
-        self.devstring = devstring
+    def __init__(self, devstring, loops, delay=2.0, channel = 11, verbose=False, ignore=False):
         self.delay = delay
         self.channel = channel
         self.verbose = verbose
@@ -23,9 +20,13 @@ class ZigBeeDeviceFinder():
         self.txcount = 0
         self.rxcount = 0
         self.loops = loops
-        self.kb = None
+        try:
+            self.kb = KillerBee(device=devstring)
+        except KBInterfaceError as e:
+            print(("Interface Error: {0}".format(e)))
+            sys.exit(-1)
 
-    def response_handler(self, stumbled, packet, channel):
+    def response_handler(self, stumbled, packet):
         d154 = Dot154PacketParser()
         # Chop the packet up
         pktdecode = d154.pktchop(packet)
@@ -47,26 +48,23 @@ class ZigBeeDeviceFinder():
             stackprofilever = beacondata[4]
 
             key = ''.join([spanid, source])
-            value = [spanid, source, extpanid, stackprofilever, channel]
+            value = [spanid, source, extpanid, stackprofilever, self.channel]
             if not key in stumbled:
                 if self.verbose:
                     print("Beacon represents new network.")
-                    # print hexdump(packet)
-                    # print pktdecode
                 stumbled[key] = value
             return stumbled
-
         if self.verbose:
             print(("Received frame is not a beacon (FCF={0}).".format(pktdecode[0].encode('hex'))))
-
         return None
 
     def interrupt(self, signum, frame):
+        self.kb.sniffer_off()
         self.kb.close()
         print(("\n{0} packets transmitted, {1} responses.".format(self.txcount, self.rxcount)))
         sys.exit(0)
 
-    def zbstumbler(self):
+    def find_zb(self):
         networkdata = None
         stumbled = {}
         # Beacon frame
@@ -75,38 +73,30 @@ class ZigBeeDeviceFinder():
         beaconp1 = beacon[0:2]
         beaconp2 = beacon[3:]
 
-        try:
-            self.kb = KillerBee(device=self.devstring)
-        except KBInterfaceError as e:
-            print(("Interface Error: {0}".format(e)))
-            sys.exit(-1)
-
         signal.signal(signal.SIGINT, self.interrupt)
-        print(("ZigbeeDeviceFinder.py: Transmitting and receiving on interface \'{0}\'".format(self.kb.get_dev_info()[0])))
+        print(("Transmitting and receiving on interface \'{0}\'".format(self.kb.get_dev_info()[0])))
 
         # Sequence number of beacon request frame
         seqnum = 0
-        if self.channel:
-            self.kb.set_channel(self.channel)
-        else:
-            channel = 11
+
+        self.kb.set_channel(self.channel)
 
         # Loop injecting and receiving packets
         count = 0
         while count <= self.loops:
-            if channel > 26:
-                channel = 11
+            if self.channel > 26:
+                self.channel = 11
 
             if seqnum > 255:
                 seqnum = 0
 
-            if not channel:
+            if not self.channel:
                 if self.verbose:
-                    print(("Setting channel to {0}.".format(channel)))
+                    print(("Setting channel to {0}.".format(self.channel)))
                 try:
-                    self.kb.set_channel(channel)
+                    self.kb.set_channel(self.channel)
                 except Exception as e:
-                    print(("ERROR: Failed to set channel to {0}. ({1})".format(channel, e)))
+                    print(("ERROR: Failed to set channel to {0}. ({1})".format(self.channel, e)))
                     sys.exit(-1)
 
             if self.verbose:
@@ -133,12 +123,9 @@ class ZigBeeDeviceFinder():
                     self.rxcount += 1
                     if self.verbose:
                         print("Received frame.")  # , time.time()-start
-                    networkdata = self.response_handler(stumbled, recvpkt[0], channel)
-
-            self.kb.sniffer_off()
+                    networkdata = self.response_handler(stumbled, recvpkt[0])
             seqnum += 1
             count += 1
-            if not channel:
-                channel += 1
-        if networkdata is not None:
-            return networkdata
+            if not self.channel:
+                self.channel += 1
+        return networkdata

@@ -109,3 +109,6 @@ Perl/
 
 # old killerbee files
 *.bak
+
+# samples
+samples/
