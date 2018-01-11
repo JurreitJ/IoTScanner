@@ -12,7 +12,7 @@ def read_zbcfg(zbcfg):
             return json.load(zbcfg_file)
     except json.decoder.JSONDecodeError:
         print("Could not load devices.")
-        sys.exit(2)
+        sys.exit(1)
 
 def read_devices(dev_config_input):
     try:
@@ -20,7 +20,7 @@ def read_devices(dev_config_input):
             return json.load(devConfigFile)
     except json.decoder.JSONDecodeError:
         print("Could not load devices.")
-        sys.exit(2)
+        sys.exit(1)
 
 
 def retrieve_tag(device, position):

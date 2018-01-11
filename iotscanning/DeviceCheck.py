@@ -3,10 +3,11 @@ Checks, whether the program can connect to a web server
 or ssh server, using known standard credentials
 """
 
-import HTTPHandler
-import SSHCheck
-import ZigbeeScanning
-from HTTPCheck import HTTPCheck
+from iotscanning import HTTPHandler
+from iotscanning import ZigbeeScanning
+from iotscanning.HTTPCheck import HTTPCheck
+from iotscanning import SSHCheck
+import iotscanning
 
 
 def check_tcp(ip, scanresults, devices):
@@ -20,6 +21,7 @@ def check_tcp(ip, scanresults, devices):
     for port in scanresults.keys():
         print(port)
         if scanresults[port] == 'ssh':
+            #TODO: Read credentials from defined directory
             login_possible = False
             for login in devices['ssh']:
                 login_possible = SSHCheck.ssh_check(ip, port, devices['ssh'][login]['username'],
@@ -39,8 +41,9 @@ def check_tcp(ip, scanresults, devices):
                 else:
                     http_check.check_login(devtype)
         else:
-            print("Could not check port", port, ", because the service is not supported. Service is:",
-                  scanresults[port])
+            if iotscanning.verbose:
+                print("Could not check port", port, ", because the service is not supported. Service is:",
+                      scanresults[port])
 
 
 def check_zb(zbdata):

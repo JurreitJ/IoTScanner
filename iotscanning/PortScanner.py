@@ -8,7 +8,7 @@ import nmap
 def scan_ports(ip):
     open_ports = dict()
     scanner = nmap.PortScanner()
-    scanner.scan(ip, arguments="-sT")  # max port 65535; try -Pn if scan fails;
+    scanner.scan(ip, arguments="-sT -Pn")  # max port 65535; try -Pn if scan fails;
     if scanner.all_hosts().__len__() == 0:
         print("Could not find any hosts at ip:", ip)
     else:

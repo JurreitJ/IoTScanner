@@ -6,10 +6,11 @@ import re
 import sys
 import urllib.request
 
+from iotscanning import HTTPHandler
+import iotscanning
 from bs4 import BeautifulSoup
 
-import DataManager
-import HTTPHandler
+from iotscanning import DataManager
 
 
 class HTTPCheck:
@@ -39,7 +40,6 @@ class HTTPCheck:
             for device in self.devices["http"].keys():
                 self.get_data(device)
                 if self.__html_position == "header":
-                    device_found = None
                     self.__header_tag = DataManager.retrieve_header_tag(self.__devtype_pattern)
                     self.__header_comparison_operator = DataManager.retrieve_header_comparison_operator(
                         self.__devtype_pattern)
@@ -48,53 +48,56 @@ class HTTPCheck:
                         if self.__header_comparison_operator == "==" \
                                 and \
                                         header[self.__header_tag] == self.__header_pattern:
-                            print("device found:", device)
-                            device_found = self.devices["http"][device]
+                            if iotscanning.verbose:
+                                print("device found:", device)
+                            return self.devices["http"][device]
                         elif self.__header_comparison_operator == "regex" \
                                 and \
                                 re.match(self.__header_pattern, header[self.__header_tag]):
-                            print("device found:", device)
-                            device_found = self.devices["http"][device]
-                    if device_found:
-                        return device_found
-                    else:
-                        print("couldn't find any device with matching header field.")
+                            if iotscanning.verbose:
+                                print("device found:", device)
+                            return self.devices["http"][device]
                 else:
                     if self.__tag_name == "title":
                         if (self.__comparison_operator == "==") \
                                 and \
                                 (soup.title.string == self.__comparison_pattern):
-                            print("device found:", device)
+                            if iotscanning.verbose:
+                                print("device found:", device)
                             return self.devices["http"][device]
                         elif self.__comparison_operator == "regex" \
                                 and \
                                 re.match(self.__comparison_pattern, soup.title.string):
-                            print("device found:", device)
+                            if iotscanning.verbose:
+                                print("device found:", device)
                             return self.devices["http"][device]
                     elif self.__tag_name == "meta":
                         if self.__comparison_operator == "==":
                             for meta in soup.find_all('meta'):
                                 if meta == self.__comparison_pattern:
-                                    print("device found:", device)
+                                    if iotscanning.verbose:
+                                        print("device found:", device)
                                     return self.devices["http"][device]
                         elif self.__comparison_operator == "regex":
                             for meta in soup.find_all('meta'):
                                 if re.match(self.__comparison_pattern, meta):
-                                    print("device found:", device)
+                                    if iotscanning.verbose:
+                                        print("device found:", device)
                                     return self.devices["http"][device]
                     elif self.__tag_name != "" and self.__tag_name != None:
                         for pattern in soup.find_all(self.__tag_name):
                             if re.match(self.__comparison_pattern, str(pattern)):
-                                print("device found:", device)
+                                if iotscanning.verbose:
+                                    print("device found:", device)
                                 return self.devices["http"][device]
                     else:
                         if re.match(self.__comparison_pattern, html):
-                            print("device found:", device)
+                            if iotscanning.verbose:
+                                print("device found:", device)
                             return self.devices["http"][device]
         else:
-            print(self.devices)
             print("No devices.")
-            sys.exit(2)
+            sys.exit(1)
 
     def check_login(self, devtype):
         if "nextUrl" in devtype.keys():
@@ -140,18 +143,22 @@ class HTTPCheck:
             if response == 401:
                 return True
             elif response == 404:
-                print("Got 404 response.")
+                if iotscanning.verbose:
+                    print("Got 404 response.")
                 return False
             elif response == 595:
-                print("Failed to establish TCP connection.")
+                if iotscanning.verbose:
+                    print("Failed to establish TCP connection.")
                 return False
             else:
-                print("unexpected status code:", response)
+                if iotscanning.verbose:
+                    print("unexpected status code:", response)
                 return False
         elif response.getcode() == 200:
             return True
         else:
-            print("unexpected response: ", response)
+            if iotscanning.verbose:
+                print("unexpected response: ", response)
             return False
 
     def get_data(self, index):

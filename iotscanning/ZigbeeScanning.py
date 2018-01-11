@@ -1,8 +1,9 @@
 import re
 
-from ZigbeeDeviceFinder import ZigBeeDeviceFinder
-from ZigbeeSniffer import ZigbeeSniffer
+from iotscanning.ZigbeeDeviceFinder import ZigBeeDeviceFinder
+from iotscanning.ZigbeeSniffer import ZigbeeSniffer
 from killerbee import *
+from iotscanning import verbose
 
 
 def __find_transceiver():
@@ -14,8 +15,8 @@ def __find_transceiver():
     return device
 
 
-def __find_zbdevices(kbdevice, loops, delay, verbose):
-    zbfinder = ZigBeeDeviceFinder(kbdevice, loops, delay, verbose)
+def __find_zbdevices(kbdevice, loops, delay):
+    zbfinder = ZigBeeDeviceFinder(kbdevice, loops, delay)
     zbdata = zbfinder.find_zb()
     """for key in zbdata:
         print(zbdata[key][0])"""
@@ -23,14 +24,14 @@ def __find_zbdevices(kbdevice, loops, delay, verbose):
     del zbfinder
 
 
-def __sniff(kbdevice, file, channel, packet_count, verbose):
-    sniffer = ZigbeeSniffer(verbose, file, kbdevice, channel, packet_count)
+def __sniff(kbdevice, file, channel, packet_count):
+    sniffer = ZigbeeSniffer(file, kbdevice, channel, packet_count)
     sniffer.sniff_packets()
     sniffer.sniff_key(file)
     del sniffer
 
 
-def scan(zbdata, verbose):
+def scan(zbdata):
     file = zbdata["sniffing"]["file"]
     packet_count = ["sniffing"]["packet_count"]
     loops = zbdata["device_search"]["loop"]
@@ -38,5 +39,5 @@ def scan(zbdata, verbose):
     # TODO: Retrieve channel from found devices;
     channel = 11
     kbdevice = __find_transceiver()
-    __find_zbdevices(kbdevice, loops, delay, verbose)
-    __sniff(kbdevice, file, channel, packet_count, verbose)
+    __find_zbdevices(kbdevice, loops, delay)
+    __sniff(kbdevice, file, channel, packet_count)

@@ -4,12 +4,12 @@
 # rmspeers 2010-13
 # ZigBee/802.15.4 WarDriving Platform
 
-from time import sleep
+from iotscanning.killerbee import KillerBee
 from usb import USBError
 
-from killerbee import KillerBee, kbutils
-from .db import ZBScanDB
+from killerbee import kbutils
 from .scanning import doScan
+
 
 # GPS Poller
 def gpsdPoller(currentGPS):

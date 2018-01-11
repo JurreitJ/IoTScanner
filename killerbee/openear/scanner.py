@@ -3,11 +3,14 @@
 # rmelgares 2011
 # Promiscious capture on multiple channels at once
 
-import gps, time, os, signal, sys, operator, threading
-import string, socket, struct, datetime
-
-from killerbee import *
+import datetime
 import queue
+import signal
+import sys
+import threading
+
+import gps
+from iotscanning.killerbee import *
 
 # Globals
 session = ""

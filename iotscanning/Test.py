@@ -3,7 +3,7 @@ File to test new functionalities, before implementing;
 Not Unit tests;
 """
 
-import ZigbeeScanning
+from iotscanning import ZigbeeScanning
 
 ZigbeeScanning.scan()
 

@@ -1,6 +1,8 @@
+import signal
 import sys
+import threading
 from datetime import datetime
-import threading, signal
+
 from killerbee import *
 
 # Globals

@@ -10,14 +10,14 @@ except ImportError:
     #print("Warning: You are using pyUSB 0.x, future deprecation planned.")
     USBVER=0
 
-import serial
-import os, glob
-import time
-import random
+import glob
 import inspect
+import os
+import random
+import time
 from struct import pack
 
-from .config import *       #to get DEV_ENABLE_* variables
+import serial
 
 # Known devices by USB ID:
 RZ_USB_VEND_ID      = 0x03EB

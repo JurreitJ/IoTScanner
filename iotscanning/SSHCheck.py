@@ -4,6 +4,7 @@ using the given address and credentials
 """
 
 import paramiko
+import iotscanning
 
 
 def ssh_check(host, port, username, password):
@@ -16,8 +17,9 @@ def ssh_check(host, port, username, password):
     try:
         ssh.connect(host, port, username, password)
         login_possible = True
-        print("SSH login with standard password", password)
+        print("SSH login with standard credentials, username:", username, ", password:", password, "is possible.")
     except Exception as e:
-        print(e)
+        if iotscanning.verbose:
+            print(e, "username: ", username, "password: ", password)
     ssh.close()
     return login_possible
