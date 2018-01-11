@@ -5,12 +5,18 @@ or ssh server, using known standard credentials
 
 import HTTPHandler
 import SSHCheck
+import ZigbeeScanning
 from HTTPCheck import HTTPCheck
 
 
-def check(ip, scanresults, devices):
-    # FIXME: Programm springt aus der Schleife, nach Überprüfung von HTTP;
-    # TODO: Use lambdas;
+def check_tcp(ip, scanresults, devices):
+    '''
+    Check device security via tcp
+    :param ip:
+    :param scanresults:
+    :param devices:
+    :return:
+    '''
     for port in scanresults.keys():
         print(port)
         if scanresults[port] == 'ssh':
@@ -31,7 +37,10 @@ def check(ip, scanresults, devices):
                 if not devtype:
                     print("No matching device found.")
                 else:
-                    return http_check.check_login(devtype)
+                    http_check.check_login(devtype)
         else:
             print("Could not check port", port, ", because the service is not supported. Service is:",
                   scanresults[port])
+
+def check_zb():
+    ZigbeeScanning.scan()

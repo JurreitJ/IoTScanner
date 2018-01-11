@@ -16,14 +16,11 @@ def read_devices(dev_config_input):
 
 
 def retrieve_tag(device, position):
-    if "body" in device.keys():
-        return device[position]['tag']
-    else:
-        return None
+    return device[position]['tag']
 
 
-def retrieve_device_pattern(devices, index):
-    return devices["http"][index]['devTypePattern']
+def retrieve_device_pattern(device):
+    return device['devTypePattern']
 
 
 def retrieve_comparison_operator(device, position):
@@ -63,3 +60,15 @@ def retrieve_credentials_keys(device):
 
 def retrieve_next_url(device):
     return device['nextUrl']
+
+
+def retrieve_header_tag(device):
+    return device['header']['tag']
+
+
+def retrieve_header_pattern(device):
+    return device['header']['pattern'][1]
+
+
+def retrieve_header_comparison_operator(device):
+    return device['header']['pattern'][0]
