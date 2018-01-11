@@ -3,8 +3,11 @@ File to test new functionalities, before implementing;
 Not Unit tests;
 """
 
-import urllib.request
+import ZigbeeScanning
 
-response = urllib.request.urlopen("https://www.google.de")
-response = response.info()
-print(response['server'])
+ZigbeeScanning.scan()
+
+
+
+
+
