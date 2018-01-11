@@ -42,5 +42,6 @@ def check_tcp(ip, scanresults, devices):
             print("Could not check port", port, ", because the service is not supported. Service is:",
                   scanresults[port])
 
-def check_zb():
-    ZigbeeScanning.scan()
+
+def check_zb(zbdata):
+    ZigbeeScanning.scan(zbdata)

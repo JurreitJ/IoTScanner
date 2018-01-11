@@ -6,6 +6,14 @@ import json
 import sys
 
 
+def read_zbcfg(zbcfg):
+    try:
+        with open(zbcfg) as zbcfg_file:
+            return json.load(zbcfg_file)
+    except json.decoder.JSONDecodeError:
+        print("Could not load devices.")
+        sys.exit(2)
+
 def read_devices(dev_config_input):
     try:
         with open(dev_config_input) as devConfigFile:

@@ -5,11 +5,13 @@ Mostly copied from killerbees zbdump
 
 import signal
 import sys
-from killerbee import *
+
 import killerbee
+from killerbee import *
+
 
 class ZigbeeSniffer():
-    def __init__(self, file, devstring, channel = 11, count = 10):
+    def __init__(self, verbose, file, devstring, channel=11, count=10):
         try:
             self.kb = KillerBee(device=devstring)
         except KBInterfaceError as e:
@@ -19,6 +21,7 @@ class ZigbeeSniffer():
         self.file = file
         self.count = count
         self.pd = killerbee.PcapDumper(killerbee.DLT_IEEE802_15_4, file)
+        self.verbose = verbose
 
     def interrupt(self, signum, frame, packetcount):
         self.kb.sniffer_off()

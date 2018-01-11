@@ -12,11 +12,10 @@ from killerbee import *
 
 
 class ZigBeeDeviceFinder():
-    def __init__(self, devstring, loops, delay=2.0, channel = 11, verbose=False, ignore=False):
+    def __init__(self, devstring, loops, delay=2.0, channel=11, verbose=False):
         self.delay = delay
         self.channel = channel
         self.verbose = verbose
-        self.ignore = ignore
         self.txcount = 0
         self.rxcount = 0
         self.loops = loops
