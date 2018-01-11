@@ -139,6 +139,7 @@ class ZigbeeSniffer():
             return
 
     def sniff_key(self, file):
+        #FIXME: Works with captured file, but not with sample file;
         print ("Processing %s" % file)
         if not os.path.exists(file):
             print("ERROR: Input file \"%s\" does not exist." % file)

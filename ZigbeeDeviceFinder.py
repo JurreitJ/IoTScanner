@@ -65,6 +65,7 @@ class ZigBeeDeviceFinder():
         sys.exit(0)
 
     def find_zb(self):
+        #FIXME: random USB ERROR
         networkdata = None
         stumbled = {}
         # Beacon frame

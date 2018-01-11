@@ -15,6 +15,8 @@ import PortScanner
 def main(argv):
     ip_addresses_string = ''
     dev_config_input = ''
+    verbose = None
+    zbcfg = None
 
     try:
         opts, args = getopt.getopt(argv, "hi:c:", ["ip=", "devCfg="])
@@ -41,10 +43,12 @@ def main(argv):
         for ip in ip_list:
             scan_results = PortScanner.scan_ports(ip)
             if scan_results:
-                DeviceCheck.check(ip, scan_results, devices)
+                DeviceCheck.check_tcp(ip, scan_results, devices)
     else:
         print("Could not find any ip addresses.")
         sys.exit(2)
+    if zbcfg:
+        DeviceCheck.check_zb()
 
 
 if __name__ == "__main__":
