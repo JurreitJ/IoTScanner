@@ -20,7 +20,8 @@ class ZigbeeSniffer():
         self.channel = channel
         self.file = file
         self.count = count
-        self.pd = killerbee.PcapDumper(killerbee.DLT_IEEE802_15_4, file)
+        #FIXME:   self.pd = killerbee.PcapDumper(killerbee.DLT_IEEE802_15_4, file) TypeError: sequence item 0: expected str instance, bytes found
+        self.pd = killerbee.PcapDumper(datalink=killerbee.DLT_IEEE802_15_4, savefile=file)
 
     def interrupt(self, signum, frame, packetcount):
         self.kb.sniffer_off()
@@ -140,20 +141,20 @@ class ZigbeeSniffer():
             # print e
             return
 
-    def sniff_key(self, file):
+    def sniff_key(self):
         #FIXME: Works with captured file, but not with sample file;
-        print ("Processing %s" % file)
-        if not os.path.exists(file):
-            print("ERROR: Input file \"%s\" does not exist." % file)
+        print ("Processing %s" % self.file)
+        if not os.path.exists(self.file):
+            print("ERROR: Input file \"%s\" does not exist." % self.file)
             # Check if the input file is libpcap; if not, assume SNA.
         cap = None
         pr = None
         try:
-            pr = PcapReader(file)
+            pr = PcapReader(self.file)
         except Exception as e:
             if e.args == ('Unsupported pcap header format or version',):
                 # Input file was not pcap, open it as SNA
-                cap = DainTreeReader(file)
+                cap = DainTreeReader(self.file)
 
         # Following exception
         if cap is None:
