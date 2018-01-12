@@ -19,17 +19,22 @@ def check_tcp(ip, scanresults, devices):
     :return:
     '''
     for port in scanresults.keys():
-        print(port)
         if scanresults[port] == 'ssh':
             #TODO: Read credentials from defined directory
             login_possible = False
-            for login in devices['ssh']:
-                login_possible = SSHCheck.ssh_check(ip, port, devices['ssh'][login]['username'],
-                                                    devices['ssh'][login]['password'])
+            brute_force_successful = False
+            for login in devices['ssh']['list']:
+                login_possible = SSHCheck.ssh_check(ip, port, devices['ssh']['list'][login]['username'],
+                                                    devices['ssh']['list'][login]['password'])
                 if login_possible:
                     break
             if not login_possible:
-                print("Could not log into ssh with any default password.")
+                for wordlist in devices['ssh']['wordlists']:
+                    brute_force_successful = SSHCheck.bruteforce_ssh(ip, port, devices['ssh']['wordlists'][wordlist])
+                    if brute_force_successful:
+                        break
+                if not brute_force_successful:
+                    print("Could not log into ssh with any default password.")
         elif scanresults[port] == 'http':
             url = HTTPHandler.compose_url(ip, port)
             response = HTTPHandler.fetch(url)
