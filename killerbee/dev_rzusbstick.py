@@ -416,12 +416,13 @@ class RZUSBSTICK:
             self.set_channel(channel)
 
         # Append two bytes to be replaced with FCS by firmware.
-        packet += "\x00\x00"
+        packet_bytes = bytes(packet, 'utf-8')
+        packet_bytes += bytes("\x00\x00", 'utf-8')
 
         for pnum in range(count):
             # Format for packet is opcode RZ_CMD_INJECT_FRAME, one-byte length, 
             # packet data
-            self.__usb_write(RZ_USB_COMMAND_EP, struct.pack("BB", RZ_CMD_INJECT_FRAME, len(packet)) + packet)
+            self.__usb_write(RZ_USB_COMMAND_EP, struct.pack("BB", RZ_CMD_INJECT_FRAME, len(packet_bytes)) + packet_bytes)
             time.sleep(delay)
 
     # KillerBee expects the driver to implement this function
