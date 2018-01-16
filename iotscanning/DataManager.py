@@ -11,7 +11,7 @@ def read_zbcfg(zbcfg):
         with open(zbcfg) as zbcfg_file:
             return json.load(zbcfg_file)
     except json.decoder.JSONDecodeError:
-        print("Could not load devices.")
+        print("DataManager.py: Could not load zigbee configuration file.")
         sys.exit(1)
 
 def read_devices(dev_config_input):
