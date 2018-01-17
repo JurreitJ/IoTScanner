@@ -3,11 +3,8 @@ File to test new functionalities, before implementing;
 Not Unit tests;
 """
 
-import ZigbeeScanning
+import struct
 
-ZigbeeScanning.scan()
+test = 4881 & 0x0007
 
-
-
-
-
+print(test)
