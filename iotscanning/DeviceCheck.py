@@ -20,7 +20,6 @@ def check_tcp(ip, scanresults, devices):
     '''
     for port in scanresults.keys():
         if scanresults[port] == 'ssh':
-            #TODO: Read credentials from defined directory
             login_possible = False
             brute_force_successful = False
             for login in devices['ssh']['list']:

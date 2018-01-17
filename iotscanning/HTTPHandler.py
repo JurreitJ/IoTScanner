@@ -4,12 +4,14 @@ Functions to handle http requests and responses
 
 import urllib.parse
 import urllib.request
+import iotscanning
 
 
 def fetch(url):
     try:
         response = urllib.request.urlopen(url)
-        print("Scanning", url, "...")
+        if iotscanning.verbose:
+            print("Scanning", url, "...")
         return response
     except urllib.request.HTTPError as e:
         return e.code

@@ -107,7 +107,7 @@ class ZigBeeDeviceFinder():
         beaconp1 = beacon[0:2]
         beaconp2 = beacon[3:]
 
-        print(("Transmitting and receiving on interface \'{0}\'".format(self.kb.get_dev_info()[0])))
+        print(("\nTransmitting and receiving on interface \'{0}\'".format(self.kb.get_dev_info()[0])))
 
         # Sequence number of beacon request frame
         seqnum = 0
@@ -161,5 +161,5 @@ class ZigBeeDeviceFinder():
             self.channel += 1
             self.kb.sniffer_off()
         self.kb.close()
-        print(("\n{0} packets transmitted, {1} responses.".format(self.txcount, self.rxcount)))
+        print(("{0} packets transmitted, {1} responses.".format(self.txcount, self.rxcount)))
         return networkdata

@@ -20,7 +20,6 @@ class ZigbeeSniffer():
         self.channel = channel
         self.file = file
         self.count = count
-        #FIXME:   self.pd = killerbee3.PcapDumper(killerbee3.DLT_IEEE802_15_4, file) TypeError: sequence item 0: expected str instance, bytes found
         self.pd = killerbee3.PcapDumper(datalink=killerbee3.DLT_IEEE802_15_4, savefile=file)
 
     def interrupt(self, signum, frame, packetcount):
@@ -40,7 +39,7 @@ class ZigbeeSniffer():
             sys.exit(1)
         self.kb.set_channel(self.channel)
         self.kb.sniffer_on()
-        print(("Listening on \'{0}\', link-type DLT_IEEE802_15_4, capture size 127 bytes".format(
+        print(("\nListening on \'{0}\', link-type DLT_IEEE802_15_4, capture size 127 bytes".format(
             self.kb.get_dev_info()[0])))
 
         rf_freq_mhz = (self.channel - 10) * 5 + 2400
@@ -143,7 +142,7 @@ class ZigbeeSniffer():
 
     def sniff_key(self):
         #FIXME: Works with captured file, but not with sample file;
-        print ("Processing %s" % self.file)
+        print ("\nProcessing %s" % self.file)
         if not os.path.exists(self.file):
             print("ERROR: Input file \"%s\" does not exist." % self.file)
             # Check if the input file is libpcap; if not, assume SNA.

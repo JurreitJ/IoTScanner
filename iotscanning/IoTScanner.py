@@ -39,6 +39,7 @@ def main():
             scan_results = PortScanner.scan_ports(ip)
             if scan_results:
                 DeviceCheck.check_tcp(ip, scan_results, devices)
+        print("-------------------------------------------------")
     if zbcfg:
         zbdata = DataManager.read_zbcfg(zbcfg)
         DeviceCheck.check_zb(zbdata)
