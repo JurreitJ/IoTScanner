@@ -31,11 +31,12 @@ def main():
         print('\nIPs are', ip_addresses_string)
         print('Config file is', dev_config_input)
         print('zigbee configuration file is', zbcfg)
-        print('verbose is {0} \n'.format(iotscanning.verbose))
+        print('verbose is {0}'.format(iotscanning.verbose))
     if dev_config_input and ip_addresses_string:
         devices = DataManager.read_devices(dev_config_input)
         ip_list = IPHandler.get_ip_list(ip_addresses_string)
         for ip in ip_list:
+            print("\nScanning hosts with ip {0} ...".format(ip))
             scan_results = PortScanner.scan_ports(ip)
             if scan_results:
                 DeviceCheck.check_tcp(ip, scan_results, devices)

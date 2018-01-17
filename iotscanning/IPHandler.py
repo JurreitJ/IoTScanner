@@ -9,7 +9,7 @@ import netaddr
 
 def get_ip_list(ip_addresses_string):
     ip_list = list()
-    ip_addresses = re.split("[\,]", ip_addresses_string)
+    ip_addresses = re.split("[,]", ip_addresses_string)
     for ipAddress in ip_addresses:
         match_ip_range = re.search("[-]", ipAddress)
         if match_ip_range:
