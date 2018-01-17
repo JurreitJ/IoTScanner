@@ -5,7 +5,6 @@ channel hopping to identify ZigBee Coordinator/Router devices.
 Originally from killerbee, modified for zigbee scanner;
 '''
 
-import signal
 import sys
 import iotscanning
 
