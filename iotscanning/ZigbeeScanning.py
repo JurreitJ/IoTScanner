@@ -20,7 +20,6 @@ def __find_transceiver():
 def __find_zbdevices(kbdevice, loops, delay):
     zbfinder = ZigBeeDeviceFinder(kbdevice, loops, delay)
     channel = zbfinder.find_zb()
-    print("zbScanning, channel:", channel)
     return channel
 
 
@@ -42,7 +41,6 @@ def scan(zbdata):
         __sniff(kbdevice, file, channel, packet_count)
     else:
         channels_to_sniff = __find_zbdevices(kbdevice, loops, delay)
-        print("channels to sniff:", channels_to_sniff)
         if channels_to_sniff is None:
             print("Couldn't find any nearby zigbee devices.")
         else:

@@ -96,7 +96,6 @@ class ZigBeeDeviceFinder():
                 print(("Received frame is not a beacon (FCF={0}).".format(int.from_bytes(pktdecode[0], sys.byteorder))))
             if not self.channel in self.devices_found:
                 self.devices_found.append(self.channel)
-        print("ZBFinder, devices found:", self.devices_found)
         return self.devices_found
 
 
@@ -158,7 +157,6 @@ class ZigBeeDeviceFinder():
                     if iotscanning.verbose:
                         print("Received frame.")  # , time.time()-start
                     networkdata = self.response_handler(recvpkt[0])
-                    print("zbFinder, networkdata:", networkdata)
             seqnum += 1
             self.channel += 1
             self.kb.sniffer_off()
