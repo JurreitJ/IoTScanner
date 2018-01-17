@@ -9,5 +9,4 @@ setup(name='iotscanning',
       license='BSD',
       packages=['iotscanning'],
       install_requires=['urllib3', 'beautifulsoup4', 'netaddr', 'python-nmap', 'paramiko'],
-      dependency_links=["https://github.com/riverloopsec/killerbee/"],
       zip_safe=False)
