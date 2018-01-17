@@ -19,7 +19,7 @@ def main():
     parser.add_argument('-d', '--devices', dest='devices_cfg', action='store', default=None,
                         help="Path to configuration file of devices.")
     parser.add_argument('-z', '--zigbee', dest='zbcfg', action='store', default=None,
-                        help="Path to killerbee scanning configuration file. Requires sudo and special hardware.")
+                        help="Path to killerbee3 scanning configuration file. Requires sudo and special hardware.")
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true', default=False,
                         help="Verbose")
     args = parser.parse_args()

@@ -285,7 +285,7 @@ class RZUSBSTICK:
                 if response in RESPONSE_MAP:
                     raise Exception("Error: %s" % RESPONSE_MAP[response])
                 else:
-                    raise Exception("Unknown USB write error: 0x%02x" % response)
+                    raise Exception("dev_rzusbstick: Unknown USB write error: 0x%02x" % response)
 
     def _set_mode(self, mode=RZ_CMD_MODE_AC):
         '''
@@ -481,9 +481,9 @@ class RZUSBSTICK:
                     framedata.append(struct.pack("B", byteval))
                 #Return in a nicer dictionary format, so we don't have to reference by number indicies.
                 #Note that 0,1,2 indicies inserted twice for backwards compatibility.
-                ret = {1:validcrc, 2:rssi, \
-                        'validcrc':validcrc, 'rssi':rssi, \
-                        'dbm':rssi,'datetime':datetime.utcnow()}
+                ret = {1:validcrc, 2:rssi,
+                       'validcrc':validcrc, 'rssi':rssi,
+                       'dbm':rssi,'datetime':datetime.utcnow()}
                 #TODO calculate dbm based on RSSI conversion formula for the chip
             else:
                 if ret is not None:

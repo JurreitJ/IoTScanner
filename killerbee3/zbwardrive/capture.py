@@ -3,7 +3,7 @@ import sys
 import threading
 from datetime import datetime
 
-from killerbee import *
+from killerbee3 import *
 
 # Globals
 triggers = []

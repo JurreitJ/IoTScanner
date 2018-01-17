@@ -6,8 +6,8 @@ Mostly copied from killerbees zbdump
 import signal
 import sys
 
-import killerbee
-from killerbee import *
+import killerbee3
+from killerbee3 import *
 
 
 class ZigbeeSniffer():
@@ -20,8 +20,8 @@ class ZigbeeSniffer():
         self.channel = channel
         self.file = file
         self.count = count
-        #FIXME:   self.pd = killerbee.PcapDumper(killerbee.DLT_IEEE802_15_4, file) TypeError: sequence item 0: expected str instance, bytes found
-        self.pd = killerbee.PcapDumper(datalink=killerbee.DLT_IEEE802_15_4, savefile=file)
+        #FIXME:   self.pd = killerbee3.PcapDumper(killerbee3.DLT_IEEE802_15_4, file) TypeError: sequence item 0: expected str instance, bytes found
+        self.pd = killerbee3.PcapDumper(datalink=killerbee3.DLT_IEEE802_15_4, savefile=file)
 
     def interrupt(self, signum, frame, packetcount):
         self.kb.sniffer_off()

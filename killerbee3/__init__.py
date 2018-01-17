@@ -2,11 +2,11 @@ from warnings import warn
 
 from .config import *  # to get DEV_ENABLE_* variables
 from .daintree import *
-from .dot154decode import *  # would like to import only within killerbee class
+from .dot154decode import *  # would like to import only within killerbee3 class
 from .kbutils import *  # provides serial, usb, USBVER
 from .pcapdlt import *
 from .pcapdump import *
-from .zigbeedecode import *  # would like to import only within killerbee class
+from .zigbeedecode import *  # would like to import only within killerbee3 class
 
 
 # Utility Functions

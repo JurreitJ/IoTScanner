@@ -7,7 +7,7 @@
 from iotscanning.killerbee import KillerBee
 from usb import USBError
 
-from killerbee import kbutils
+from killerbee3 import kbutils
 from .scanning import doScan
 
 

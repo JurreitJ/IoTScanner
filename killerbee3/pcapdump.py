@@ -114,7 +114,7 @@ class PcapDumper:
         @param ppi: Include CACE Per-Packet Information (defaults to False)
         @rtype: None
         '''
-        if ppi: from killerbee.pcapdlt import DLT_PPI
+        if ppi: from killerbee3.pcapdlt import DLT_PPI
         self.ppi = ppi
 
         if isinstance(savefile, str):

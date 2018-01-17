@@ -10,13 +10,13 @@ from scapy.packet import Gen, Raw
 from scapy.all import *
 # This line will allow KillerBee's pcap reader to overwrite scapy's reader that is imported on the
 # above line, per suggestion from cutaway at https://code.google.com/p/killerbee/issues/detail?id=28:
-from killerbee import *
+from killerbee3 import *
 
 import os, time, struct
 from .kbutils import randmac
 
 import logging
-log_killerbee = logging.getLogger('scapy.killerbee')
+log_killerbee = logging.getLogger('scapy.killerbee3')
 
 def __kb_send(kb, x, channel = None, inter = 0, loop = 0, count = None, verbose = None, realtime = None, *args, **kargs):
     if type(x) is str:
@@ -211,7 +211,7 @@ def kbrdpcap(filename, count = -1, skip = 0, nofcs=False):
     """
     Read a pcap file with the KillerBee library.
     Wraps the PcapReader to return scapy packet object from pcap files.
-    This uses the killerbee internal methods instead of the scapy native methods.
+    This uses the killerbee3 internal methods instead of the scapy native methods.
     This is not necessarily better, and suggestions are welcome.
     Specify nofcs parameter as True if for some reason the packets in the PCAP
     don't have FCS (checksums) at the end.
