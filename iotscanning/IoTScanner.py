@@ -28,10 +28,10 @@ def main():
     iotscanning.verbose = args.verbose
     zbcfg = args.zbcfg
     if iotscanning.verbose:
-        print('IPs are', ip_addresses_string)
+        print('\nIPs are', ip_addresses_string)
         print('Config file is', dev_config_input)
         print('zigbee configuration file is', zbcfg)
-        print('verbose is', iotscanning.verbose)
+        print('verbose is {0} \n'.format(iotscanning.verbose))
     if dev_config_input and ip_addresses_string:
         devices = DataManager.read_devices(dev_config_input)
         ip_list = IPHandler.get_ip_list(ip_addresses_string)
@@ -44,7 +44,7 @@ def main():
         zbdata = DataManager.read_zbcfg(zbcfg)
         DeviceCheck.check_zb(zbdata)
     if not (dev_config_input or ip_addresses_string or zbcfg):
-        print("Must specify either tcp or zigbee scanning arguments.")
+        print("\nMust specify either tcp or zigbee scanning arguments.")
         sys.exit(2)
 
 

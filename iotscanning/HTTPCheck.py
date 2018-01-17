@@ -49,61 +49,41 @@ class HTTPCheck:
                         if self.__header_comparison_operator == "==" \
                                 and \
                                         header[self.__header_tag] == self.__header_pattern:
-                            if iotscanning.verbose:
-                                print("device found:", device)
                             self.device_found = device
-                            return self.devices["http"][device]
                         elif self.__header_comparison_operator == "regex" \
                                 and \
                                 re.match(self.__header_pattern, header[self.__header_tag]):
-                            if iotscanning.verbose:
-                                print("device found:", device)
                             self.device_found = device
-                            return self.devices["http"][device]
                 else:
                     if self.__tag_name == "title":
                         if (self.__comparison_operator == "==") \
                                 and \
                                 (soup.title.string == self.__comparison_pattern):
-                            if iotscanning.verbose:
-                                print("device found:", device)
                             self.device_found = device
-                            return self.devices["http"][device]
                         elif self.__comparison_operator == "regex" \
                                 and \
                                 re.match(self.__comparison_pattern, soup.title.string):
-                            if iotscanning.verbose:
-                                print("device found:", device)
                             self.device_found = device
-                            return self.devices["http"][device]
                     elif self.__tag_name == "meta":
                         if self.__comparison_operator == "==":
                             for meta in soup.find_all('meta'):
                                 if meta == self.__comparison_pattern:
-                                    if iotscanning.verbose:
-                                        print("device found:", device)
                                     self.device_found = device
-                                    return self.devices["http"][device]
                         elif self.__comparison_operator == "regex":
                             for meta in soup.find_all('meta'):
                                 if re.match(self.__comparison_pattern, meta):
-                                    if iotscanning.verbose:
-                                        print("device found:", device)
                                     self.device_found = device
-                                    return self.devices["http"][device]
                     elif self.__tag_name != "" and self.__tag_name != None:
                         for pattern in soup.find_all(self.__tag_name):
                             if re.match(self.__comparison_pattern, str(pattern)):
-                                if iotscanning.verbose:
-                                    print("device found:", device)
                                 self.device_found = device
-                                return self.devices["http"][device]
                     else:
                         if re.match(self.__comparison_pattern, html):
-                            if iotscanning.verbose:
-                                print("device found:", device)
                             self.device_found = device
-                            return self.devices["http"][device]
+            if self.device_found is not None:
+                if iotscanning.verbose:
+                    print("Device found:", self.device_found)
+                return self.devices["http"][self.device_found]
         else:
             print("No devices.")
             sys.exit(1)
@@ -143,10 +123,10 @@ class HTTPCheck:
 
     def check_status(self, status):
         if status == 200:
-            print("\nDevice, identified as {0}, with url {1} still uses standard login credentials.".format(self.device_found,
+            print("Device, identified as {0}, with url {1} still uses standard login credentials.".format(self.device_found,
                   self.url))
         else:
-            print("Device with url", self.url, "doesn't use standard login credentials.")
+            print("Device {0} with url {1} doesn't use standard login credentials.".format(self.device_found, self.url))
 
     @staticmethod
     def check_availability(response):

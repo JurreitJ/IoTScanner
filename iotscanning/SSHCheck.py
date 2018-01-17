@@ -17,7 +17,8 @@ def ssh_check(host, port, username, password):
     try:
         ssh.connect(host, port, username, password)
         login_possible = True
-        print("SSH login with standard credentials, username:", username, ", password:", password, "is possible.")
+        print("SSH login with standard credentials, username: {0} and password: {1} is possible.".format(username,
+                                                                                                           password))
     except Exception as e:
         if iotscanning.verbose:
             print(e, "username: ", username, "password: ", password)
@@ -37,7 +38,7 @@ def bruteforce_ssh(host, port, wordlist):
         try:
             ssh.connect(host, port, username, password)
             login_possible = True
-            print("SSH login with standard credentials, username:", username, ", password:", password, "is possible.")
+            print("SSH login with standard credentials, username: {0} and password: {1} is possible.".format(username, password))
             break
         except Exception as e:
             if iotscanning.verbose:
