@@ -18,15 +18,9 @@ def __find_transceiver():
 
 
 def __find_zbdevices(kbdevice, loops, delay):
-    channel = []
     zbfinder = ZigBeeDeviceFinder(kbdevice, loops, delay)
-    zbdata = zbfinder.find_zb()
-    if zbdata != None:
-        for key in zbdata:
-            if not zbdata[key][4] in channel:
-                channel.append(zbdata[key][4])
-            print(zbdata[key][4])
-    del zbfinder
+    channel = zbfinder.find_zb()
+    print("zbScanning, channel:", channel)
     return channel
 
 
@@ -40,12 +34,17 @@ def __sniff(kbdevice, file, channel, packet_count):
 def scan(zbdata):
     file = zbdata["sniffing"]["file"]
     packet_count = zbdata["sniffing"]["packet_count"]
+    channel = zbdata["sniffing"]["channel"]
     loops = zbdata["device_search"]["loops"]
     delay = zbdata["device_search"]["delay"]
     kbdevice = __find_transceiver()
-    channels_to_sniff = __find_zbdevices(kbdevice, loops, delay)
-    if channels_to_sniff.__len__() == 0:
-        print("Couldn't find any nearby zigbee devices.")
+    if channel != "":
+        __sniff(kbdevice, file, channel, packet_count)
     else:
-        for channel in channels_to_sniff:
-            __sniff(kbdevice, file, channel, packet_count)
+        channels_to_sniff = __find_zbdevices(kbdevice, loops, delay)
+        print("channels to sniff:", channels_to_sniff)
+        if channels_to_sniff is None:
+            print("Couldn't find any nearby zigbee devices.")
+        else:
+            for channel in channels_to_sniff:
+                __sniff(kbdevice, file, channel, packet_count)

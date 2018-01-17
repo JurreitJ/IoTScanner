@@ -125,8 +125,8 @@ class PcapDumper:
             raise ValueError("Unsupported type for 'savefile' argument")
 
         self.datalink = datalink
-        self.byte_text = bytes("", 'utf-8')
-        self.__fh.write(self.byte_text.join([
+        self.empty_byte = bytes()
+        self.__fh.write(self.empty_byte.join([
             struct.pack("I", PCAPH_MAGIC_NUM),
             struct.pack("H", PCAPH_VER_MAJOR),
             struct.pack("H", PCAPH_VER_MINOR),
@@ -207,7 +207,7 @@ class PcapDumper:
                 else:
                     raise Exception("Altitude value is out of expected range: %.8f" % lon)
                 # Build Geolocation PPI Header
-                caceppi_fgeolocation = self.byte_text.join([
+                caceppi_fgeolocation = self.empty_byte.join([
                     struct.pack("<H", GPS_TAG),  #2 = Field Type 802.11-Common
                     struct.pack("<H", 20),       #20 = 802.11-Common length in bytes
                     struct.pack("<B", 1),        #Geotag Version
@@ -220,7 +220,7 @@ class PcapDumper:
                     ])
 
             #CACE PPI Header
-            caceppi_hdr = self.byte_text.join([
+            caceppi_hdr = self.empty_byte.join([
                 struct.pack("<B", 0),		     #PPH version
                 struct.pack("<B", 0x00),         #PPH flags
                 struct.pack("<H", pph_len),	     #PPH len
@@ -252,7 +252,7 @@ class PcapDumper:
             output_list.append(caceppi_f80211common)
 
         output_list.append(packet)
-        output = self.byte_text.join(output_list)
+        output = self.empty_byte.join(output_list)
 
         #DEBUG Output:
         #print "Pcap:", '\\x'+'\\x'.join(["%02x" % ord(x) for x in output])

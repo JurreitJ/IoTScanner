@@ -20,7 +20,7 @@ class ZigBeeDeviceFinder():
         self.rxcount = 0
         self.loops = loops
         self.devstring = devstring
-        self.devices_found = {}
+        self.devices_found = []
         try:
             self.kb = KillerBee(device=devstring)
         except KBInterfaceError as e:
@@ -63,18 +63,12 @@ class ZigBeeDeviceFinder():
         print(("\tChannel: {0}".format(channel)))
 
     def response_handler(self, packet):
-        #FIXME: Check formats! FCF is wrong!
+        stumbled = {}
         d154 = Dot154PacketParser()
         # Chop the packet up
         pktdecode = d154.pktchop(packet)
-
-        print("pktdecode:", pktdecode[0])
-
         # Byte-swap the frame control field
         fcf = struct.unpack("<H", pktdecode[0])[0]
-
-        print("should be 0", fcf)
-
         # Check if this is a beacon frame
         if (fcf & DOT154_FCF_TYPE_MASK) == DOT154_FCF_TYPE_BEACON:
             if iotscanning.verbose:
@@ -90,16 +84,20 @@ class ZigBeeDeviceFinder():
 
             key = ''.join([spanid, source])
             value = [spanid, source, extpanid, stackprofilever, self.channel]
-            if not key in self.devices_found:
+            if not key in stumbled:
                 if iotscanning.verbose:
                     print("Beacon represents new network.")
-                self.devices_found[key] = value
+                stumbled[key] = value
                 self.display_details(value)
-            return self.devices_found
-        elif iotscanning.verbose:
-            print(("Received frame is not a beacon (FCF={0}).".format(int.from_bytes(pktdecode[0], sys.byteorder))))
-        return None
-
+            if not self.channel in self.devices_found:
+                self.devices_found.append(self.channel)
+        else:
+            if iotscanning.verbose:
+                print(("Received frame is not a beacon (FCF={0}).".format(int.from_bytes(pktdecode[0], sys.byteorder))))
+            if not self.channel in self.devices_found:
+                self.devices_found.append(self.channel)
+        print("ZBFinder, devices found:", self.devices_found)
+        return self.devices_found
 
 
     def find_zb(self):
@@ -160,7 +158,10 @@ class ZigBeeDeviceFinder():
                     if iotscanning.verbose:
                         print("Received frame.")  # , time.time()-start
                     networkdata = self.response_handler(recvpkt[0])
+                    print("zbFinder, networkdata:", networkdata)
             seqnum += 1
             self.channel += 1
             self.kb.sniffer_off()
+        self.kb.close()
+        print(("\n{0} packets transmitted, {1} responses.".format(self.txcount, self.rxcount)))
         return networkdata
