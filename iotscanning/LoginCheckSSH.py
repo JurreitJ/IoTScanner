@@ -8,13 +8,12 @@ import paramiko
 import iotscanning
 
 
-def ssh_check(host, port, username, password):
+def login_check(host, port, username, password):
     login_possible = False
     ssh = paramiko.SSHClient()
     # TODO: handle host keys; do not simply accept everyone
     ssh.set_missing_host_key_policy(
         paramiko.AutoAddPolicy())
-
     try:
         ssh.connect(host, port, username, password)
         login_possible = True

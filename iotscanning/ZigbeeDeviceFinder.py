@@ -15,8 +15,8 @@ class ZigBeeDeviceFinder():
     def __init__(self, devstring, loops, delay=2.0, channel = 11):
         self.delay = delay
         self.channel = channel
-        self.txcount = 0
-        self.rxcount = 0
+        self.transmitted_package_count = 0
+        self.received_package_count = 0
         self.loops = loops
         self.devstring = devstring
         self.devices_found = []
@@ -141,7 +141,7 @@ class ZigBeeDeviceFinder():
             try:
                 if iotscanning.VERBOSE:
                     print("Injecting packet.")
-                self.txcount += 1
+                self.transmitted_package_count += 1
                 self.kb.inject(beaconinj)
             except Exception as e:
                 print(("ERROR: Unable to inject packet: {0}".format(e)))
@@ -152,7 +152,7 @@ class ZigBeeDeviceFinder():
                 recvpkt = self.kb.pnext()
                 # Check for empty packet (timeout) and valid FCS
                 if recvpkt != None and recvpkt[1]:
-                    self.rxcount += 1
+                    self.received_package_count += 1
                     if iotscanning.VERBOSE:
                         print("Received frame.")  # , time.time()-start
                     networkdata = self.response_handler(recvpkt[0])
@@ -160,5 +160,5 @@ class ZigBeeDeviceFinder():
             self.channel += 1
             self.kb.sniffer_off()
         self.kb.close()
-        print(("{0} packets transmitted, {1} responses.".format(self.txcount, self.rxcount)))
+        print(("{0} packets transmitted, {1} responses.".format(self.transmitted_package_count, self.received_package_count)))
         return networkdata

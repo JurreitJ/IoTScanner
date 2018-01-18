@@ -6,7 +6,7 @@ import urllib.response
 import urllib.request
 
 
-class LoginCheck():
+class LoginCheckHTTP():
     def __init__(self, device_name, url):
         self.device = iotscanning.DEVICES["http"][device_name]
         self.auth_type = DeviceDataHandler.retrieve_auth_type(self.device)
@@ -24,6 +24,9 @@ class LoginCheck():
                 self.check_form_login()
             elif self.is_authtype_basic():
                 self.check_basic_login()
+        else:
+            if iotscanning.VERBOSE:
+                print("Checking login is not possible, due to missing information.")
 
 
     def check_form_login(self):

@@ -6,6 +6,7 @@ import nmap
 
 
 def scan_ports(ip):
+    #TODO: Shorten this function, by splitting it up!
     open_ports = dict()
     scanner = nmap.PortScanner()
     scanner.scan(ip, arguments="-sT -Pn")  # max port 65535; try -Pn if scan fails;

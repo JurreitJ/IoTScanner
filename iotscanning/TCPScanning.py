@@ -1,9 +1,9 @@
 import iotscanning
 from iotscanning import HTTPFetcher
 from iotscanning import PortScanner
-from iotscanning import SSHCheck
+from iotscanning import LoginCheckSSH
 from iotscanning.HTTPDeviceFinder import HTTPDeviceFinder
-from iotscanning.LoginCheck import LoginCheck
+from iotscanning.LoginCheckHTTP import LoginCheckHTTP
 from iotscanning.ResponseHandler import ResponseHandler
 
 
@@ -60,7 +60,7 @@ def check_http(ip, port):
         if not device:
             print("No matching device found.")
         else:
-            login_check = LoginCheck(device, url)
+            login_check = LoginCheckHTTP(device, url)
             login_check.check_login()
 
 
@@ -70,14 +70,14 @@ def check_ssh(ip, port):
     login_possible = False
     brute_force_successful = False
     for login in iotscanning.DEVICES['ssh']['list']:
-        login_possible = SSHCheck.ssh_check(ip, port, iotscanning.DEVICES['ssh']['list'][login]['username'],
-                                            iotscanning.DEVICES['ssh']['list'][login]['password'])
+        login_possible = LoginCheckSSH.login_check(ip, port, iotscanning.DEVICES['ssh']['list'][login]['username'],
+                                                   iotscanning.DEVICES['ssh']['list'][login]['password'])
         if login_possible:
             break
     if not login_possible:
         for wordlist in iotscanning.DEVICES['ssh']['wordlists']:
-            brute_force_successful = SSHCheck.bruteforce_ssh(ip, port,
-                                                             iotscanning.DEVICES['ssh']['wordlists'][wordlist])
+            brute_force_successful = LoginCheckSSH.bruteforce_ssh(ip, port,
+                                                                  iotscanning.DEVICES['ssh']['wordlists'][wordlist])
             if brute_force_successful:
                 break
         if not brute_force_successful:
