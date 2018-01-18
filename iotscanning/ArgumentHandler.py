@@ -9,21 +9,21 @@ class ArgumentHandler():
     def __init__(self):
         _parser = argparse.ArgumentParser()
         _parser.add_argument('-i', '--ip', dest='ip_address', action='store', default=None,
-                             help="IP address or IP address range to be scanned. Format: ['127.0.0.1' | '127.0.0.1, 192.168.124.0' | '127.0.0.1 - 127.0.0.200']")
+                             help="IP address or IP address range to be scanned. Format: ['127.0.0.1' | '127.0.0.1,192.168.124.0' | '127.0.0.1-127.0.0.200']")
         _parser.add_argument('-f', '--devices', dest='devices_cfg', action='store', default=None,
                              help="Path to configuration file of devices.")
         _parser.add_argument('-cf', '--capturefile', dest='zb_capture_file', action='store', default=None,
                              help="Path to capture file. Requires sudo and special hardware.")
-        _parser.add_argument('-l', '--loops', dest='zb_loops', action='store', default=2,
+        _parser.add_argument('-l', '--loops', dest='zb_loops', action='store', default=2, type=int,
                              help="How many different sequences should be tried, when searching for zigbee devices."
                                   "Defaults to 2, if nothing is specified.")
-        _parser.add_argument('-d', '--delay', dest='zb_delay', action='store', default=2.0,
+        _parser.add_argument('-d', '--delay', dest='zb_delay', action='store', default=2.0, type=float,
                              help="The delay for sending beacon requests, while searching for zigbee devices."
                                   "Defaults to 2.0, if nothing is specified.")
-        _parser.add_argument('-p', '--packetcount', dest='zb_packet_count', action='store', default='100',
+        _parser.add_argument('-p', '--packetcount', dest='zb_packet_count', action='store', default=100, type=int,
                              help="How many packets should be captured, while scanning zigbee network."
                                   "Defaults to 100, if nothing is specified.")
-        _parser.add_argument('-c', '--channel', dest='zb_channel', action='store', default=None,
+        _parser.add_argument('-c', '--channel', dest='zb_channel', action='store', default=None, type=int,
                              help="Define the channel to sniff the zigbee network."
                                   "If nothing is specified, IoTScanner searches for used channels of nearby "
                                   "zigbee devices.")
@@ -51,7 +51,13 @@ class ArgumentHandler():
         print('ZigBee channel is', iotscanning.ZB_CHANNEL)
 
     def __get_devices(self, devices_cfg):
-        return DeviceDataHandler.read_devices(devices_cfg)
+        if devices_cfg:
+            return DeviceDataHandler.read_devices(devices_cfg)
+        else:
+            return None
 
     def __get_ip_addresses(self, ip_address_string):
-        return IPHandler.get_ip_list(ip_address_string)
+        if ip_address_string:
+            return IPHandler.get_ip_list(ip_address_string)
+        else:
+            return None

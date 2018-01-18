@@ -27,7 +27,7 @@ def scan_tcp():
                 check_ssh(ip, port)
             else:
                 if iotscanning.VERBOSE:
-                    print("Could not check port {0} because the service {1} is not supported.".format(port, scanresults[
+                    print("Could not check port {0} because the service {1} is not supported.".format(port, scan_results[
                         port]))
     print("-------------------------------------------------")
 

@@ -20,7 +20,7 @@ def main():
         TCPScanning.scan_tcp()
     if ZigbeeScanning.zb_requirements_met():
         ZigbeeScanning.scan_zb()
-    if not (TCPScanning.tcp_requirements_met() and ZigbeeScanning.zb_requirements_met()):
+    if not (TCPScanning.tcp_requirements_met() or ZigbeeScanning.zb_requirements_met()):
         print("\nMust specify either tcp or zigbee scanning arguments.")
         sys.exit(2)
 
