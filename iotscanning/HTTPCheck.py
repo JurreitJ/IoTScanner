@@ -9,7 +9,7 @@ import urllib.request
 from bs4 import BeautifulSoup
 
 import iotscanning
-from iotscanning import DataManager
+from iotscanning import DeviceDataHandler
 from iotscanning import HTTPFetcher
 
 
@@ -42,10 +42,10 @@ class HTTPCheck:
             for device in self.devices["http"].keys():
                 self.get_data(device)
                 if self.__html_position == "header":
-                    self.__header_tag = DataManager.retrieve_header_tag(self.__devtype_pattern)
-                    self.__header_comparison_operator = DataManager.retrieve_header_comparison_operator(
+                    self.__header_tag = DeviceDataHandler.retrieve_header_tag(self.__devtype_pattern)
+                    self.__header_comparison_operator = DeviceDataHandler.retrieve_header_comparison_operator(
                         self.__devtype_pattern)
-                    self.__header_pattern = DataManager.retrieve_header_pattern(self.__devtype_pattern)
+                    self.__header_pattern = DeviceDataHandler.retrieve_header_pattern(self.__devtype_pattern)
                     for header in headers:
                         if self.__header_comparison_operator == "==" \
                                 and \
@@ -158,15 +158,15 @@ class HTTPCheck:
     def get_data(self, index):
         # TODO: Function needed?
         device = self.devices["http"][index]
-        self.__devtype_pattern = DataManager.retrieve_device_pattern(device)
-        self.__html_position = DataManager.retrieve_html_position(self.__devtype_pattern)
-        self.__tag_name = DataManager.retrieve_tag(self.__devtype_pattern, self.__html_position)
-        self.__comparison_operator = DataManager.retrieve_comparison_operator(self.__devtype_pattern,
-                                                                              self.__html_position)
-        self.__comparison_pattern = DataManager.retrieve_comparison_pattern(self.__devtype_pattern,
-                                                                            self.__html_position)
-        self.__auth_type = DataManager.retrieve_auth_type(device)
-        self.__credentials_keys = DataManager.retrieve_credentials_keys(device)
-        self.__username = DataManager.retrieve_username(device)
-        self.__password = DataManager.retrieve_password(device)
-        self.__next_url = DataManager.retrieve_next_url(device)
+        self.__devtype_pattern = DeviceDataHandler.retrieve_device_pattern(device)
+        self.__html_position = DeviceDataHandler.retrieve_html_position(self.__devtype_pattern)
+        self.__tag_name = DeviceDataHandler.retrieve_tag(self.__devtype_pattern, self.__html_position)
+        self.__comparison_operator = DeviceDataHandler.retrieve_comparison_operator(self.__devtype_pattern,
+                                                                                    self.__html_position)
+        self.__comparison_pattern = DeviceDataHandler.retrieve_comparison_pattern(self.__devtype_pattern,
+                                                                                  self.__html_position)
+        self.__auth_type = DeviceDataHandler.retrieve_auth_type(device)
+        self.__credentials_keys = DeviceDataHandler.retrieve_credentials_keys(device)
+        self.__username = DeviceDataHandler.retrieve_username(device)
+        self.__password = DeviceDataHandler.retrieve_password(device)
+        self.__next_url = DeviceDataHandler.retrieve_next_url(device)

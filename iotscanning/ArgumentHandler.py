@@ -1,7 +1,7 @@
 import argparse
 
 import iotscanning
-from iotscanning import DataManager
+from iotscanning import DeviceDataHandler
 from iotscanning import IPHandler
 
 
@@ -51,7 +51,7 @@ class ArgumentHandler():
         print('ZigBee channel is', iotscanning.ZB_CHANNEL)
 
     def __get_devices(self, devices_cfg):
-        return DataManager.read_devices(devices_cfg)
+        return DeviceDataHandler.read_devices(devices_cfg)
 
     def __get_ip_addresses(self, ip_address_string):
         return IPHandler.get_ip_list(ip_address_string)
