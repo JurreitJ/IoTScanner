@@ -1,6 +1,6 @@
 import iotscanning
 from iotscanning import HTTPFetcher
-from iotscanning import PortScanner
+from iotscanning.PortScanner import PortScanner
 from iotscanning import LoginCheckSSH
 from iotscanning.HTTPDeviceFinder import HTTPDeviceFinder
 from iotscanning.LoginCheckHTTP import LoginCheckHTTP
@@ -19,9 +19,10 @@ def scan_tcp():
     Performs tcp scanning for each given ip address.
     :return:
     '''
+    port_scanner = PortScanner()
     for ip in iotscanning.IP_ADDRESS_LIST:
         print("\nScanning hosts with ip {0} ...".format(ip))
-        scan_results = PortScanner.scan_ports(ip)
+        scan_results = port_scanner.scan_ports(ip)
         for port in scan_results.keys():
             if is_http(scan_results[port]):
                 check_http(ip, port)
