@@ -6,11 +6,11 @@ import re
 import sys
 import urllib.request
 
-from iotscanning import HTTPHandler
-import iotscanning
 from bs4 import BeautifulSoup
 
+import iotscanning
 from iotscanning import DataManager
+from iotscanning import HTTPFetcher
 
 
 class HTTPCheck:
@@ -28,12 +28,13 @@ class HTTPCheck:
     __header_pattern = None
     __header_comparison_operator = None
 
-    def __init__(self, devices, url):
-        self.devices = devices
+    def __init__(self, url):
+        self.devices = iotscanning.DEVICES
         self.url = url
         self.device_found = None
 
     def search_for_devtype(self, response):
+        # TODO: Shorten this function, drastically!
         html = str(response.read())
         headers = response.info()
         soup = BeautifulSoup(html, 'lxml')
@@ -81,7 +82,7 @@ class HTTPCheck:
                         if re.match(self.__comparison_pattern, html):
                             self.device_found = device
             if self.device_found is not None:
-                if iotscanning.verbose:
+                if iotscanning.VERBOSE:
                     print("Device found:", self.device_found)
                 return self.devices["http"][self.device_found]
         else:
@@ -89,19 +90,20 @@ class HTTPCheck:
             sys.exit(1)
 
     def check_login(self, devtype):
+        # TODO: Shorten this function, drastically!
         if "nextUrl" in devtype.keys():
             if self.__auth_type == "form":
                 new_url = self.url + self.__next_url + "?" \
                           + list(self.__credentials_keys)[0] + "=" + self.__username \
                           + list(self.__credentials_keys)[1] + "=" + self.__password
-                response = HTTPHandler.fetch(new_url)
+                response = HTTPFetcher.fetch(new_url)
                 if type(response) is not int:
                     status = response.getcode()
                     self.check_status(status)
                 else:
                     # if get fails, try post
                     new_url = self.url + self.__next_url
-                    status = HTTPHandler.fetch_via_post(new_url, self.__username, self.__password)
+                    status = HTTPFetcher.fetch_via_post(new_url, self.__username, self.__password)
                     self.check_status(status)
             elif self.__auth_type == "basic":
                 password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
@@ -130,29 +132,31 @@ class HTTPCheck:
 
     @staticmethod
     def check_availability(response):
+        # TODO: Shorten this function!
         if type(response) is int:
             if response == 401:
                 return True
             elif response == 404:
-                if iotscanning.verbose:
+                if iotscanning.VERBOSE:
                     print("Got 404 response.")
                 return False
             elif response == 595:
-                if iotscanning.verbose:
+                if iotscanning.VERBOSE:
                     print("Failed to establish TCP connection.")
                 return False
             else:
-                if iotscanning.verbose:
+                if iotscanning.VERBOSE:
                     print("unexpected status code:", response)
                 return False
         elif response.getcode() == 200:
             return True
         else:
-            if iotscanning.verbose:
+            if iotscanning.VERBOSE:
                 print("unexpected response: ", response)
             return False
 
     def get_data(self, index):
+        # TODO: Function needed?
         device = self.devices["http"][index]
         self.__devtype_pattern = DataManager.retrieve_device_pattern(device)
         self.__html_position = DataManager.retrieve_html_position(self.__devtype_pattern)

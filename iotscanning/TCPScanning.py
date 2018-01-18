@@ -1,0 +1,80 @@
+import iotscanning
+from iotscanning import HTTPFetcher
+from iotscanning import PortScanner
+from iotscanning import SSHCheck
+from iotscanning.HTTPCheck import HTTPCheck
+
+
+def tcp_requirements_met():
+    if iotscanning.IP_ADDRESS_LIST and iotscanning.DEVICES:
+        return True
+    else:
+        return False
+
+
+def scan_tcp():
+    '''
+    Performs tcp scanning for each given ip address.
+    :return:
+    '''
+    for ip in iotscanning.IP_ADDRESS_LIST:
+        print("\nScanning hosts with ip {0} ...".format(ip))
+        scan_results = PortScanner.scan_ports(ip)
+        for port in scan_results.keys():
+            if is_http(scan_results[port]):
+                check_http(ip, port)
+            elif is_ssh(scan_results[port]):
+                check_ssh(ip, port)
+            else:
+                if iotscanning.VERBOSE:
+                    print("Could not check port {0} because the service {1} is not supported.".format(port, scanresults[
+                        port]))
+    print("-------------------------------------------------")
+
+
+def is_http(protocol):
+    if protocol == 'http':
+        return True
+    else:
+        return False
+
+
+def is_ssh(protocol):
+    if protocol == 'ssh':
+        return True
+    else:
+        return False
+
+
+def check_http(ip, port):
+    if iotscanning.VERBOSE:
+        print("\nScanning http...")
+    url = HTTPFetcher.compose_url(ip, port)
+    response = HTTPFetcher.fetch(url)
+    http_check = HTTPCheck(url)
+    if http_check.check_availability(response):
+        devtype = http_check.search_for_devtype(response)
+        if not devtype:
+            print("No matching device found.")
+        else:
+            http_check.check_login(devtype)
+
+
+def check_ssh(ip, port):
+    if iotscanning.VERBOSE:
+        print("\nScanning ssh...")
+    login_possible = False
+    brute_force_successful = False
+    for login in iotscanning.DEVICES['ssh']['list']:
+        login_possible = SSHCheck.ssh_check(ip, port, iotscanning.DEVICES['ssh']['list'][login]['username'],
+                                            iotscanning.DEVICES['ssh']['list'][login]['password'])
+        if login_possible:
+            break
+    if not login_possible:
+        for wordlist in iotscanning.DEVICES['ssh']['wordlists']:
+            brute_force_successful = SSHCheck.bruteforce_ssh(ip, port,
+                                                             iotscanning.DEVICES['ssh']['wordlists'][wordlist])
+            if brute_force_successful:
+                break
+        if not brute_force_successful:
+            print("Could not log into ssh with any default password.")
