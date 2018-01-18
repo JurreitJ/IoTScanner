@@ -20,13 +20,13 @@ class ZigbeeSniffer():
         self.channel = channel
         self.file = file
         self.count = count
-        self.pd = killerbee3.PcapDumper(datalink=killerbee3.DLT_IEEE802_15_4, savefile=file)
+        self.pcap_dumper = killerbee3.PcapDumper(datalink=killerbee3.DLT_IEEE802_15_4, savefile=file)
 
     def interrupt(self, signum, frame, packetcount):
         self.kb.sniffer_off()
         self.kb.close()
-        if self.pd:
-            self.pd.close()
+        if self.pcap_dumper:
+            self.pcap_dumper.close()
         print(("{0} packets captured".format(packetcount)))
         sys.exit(0)
 
@@ -48,12 +48,12 @@ class ZigbeeSniffer():
             # packet[1] is True if CRC is correct, check removed to have promiscous capture regardless of CRC
             if packet != None:  # and packet[1]:
                 packetcount += 1
-                if self.pd:
-                    self.pd.pcap_dump(packet['bytes'], ant_dbm=packet['dbm'], freq_mhz=rf_freq_mhz)
+                if self.pcap_dumper:
+                    self.pcap_dumper.pcap_dump(packet['bytes'], ant_dbm=packet['dbm'], freq_mhz=rf_freq_mhz)
         self.kb.sniffer_off()
         self.kb.close()
-        if self.pd:
-            self.pd.close()
+        if self.pcap_dumper:
+            self.pcap_dumper.close()
         print(("{0} packets captured".format(packetcount)))
 
 
@@ -65,27 +65,27 @@ class ZigbeeSniffer():
         """
 
         try:
-            zmac = Dot154PacketParser()
-            znwk = ZigBeeNWKPacketParser()
-            zaps = ZigBeeAPSPacketParser()
+            dot154_pkt_parser = Dot154PacketParser()
+            zb_nwk_pkt_parser = ZigBeeNWKPacketParser()
+            zb_aps_pkt_parser = ZigBeeAPSPacketParser()
 
             # Process MAC layer details
-            zmacpayload = zmac.pktchop(packet)[-1]
-            if zmacpayload == None:
+            dot154_payload = dot154_pkt_parser.pktchop(packet)[-1]
+            if dot154_payload == None:
                 return
 
             # Process NWK layer details
-            znwkpayload = znwk.pktchop(zmacpayload)[-1]
-            if znwkpayload == None:
+            nwk_payload = zb_nwk_pkt_parser.pktchop(dot154_payload)[-1]
+            if nwk_payload == None:
                 return
 
             # Process the APS layer details
-            zapschop = zaps.pktchop(znwkpayload)
-            if zapschop == None:
+            aps_chop = zb_aps_pkt_parser.pktchop(nwk_payload)
+            if aps_chop == None:
                 return
 
             # See if this is an APS Command frame
-            apsfc = ord(zapschop[0])
+            apsfc = ord(aps_chop[0])
             if (apsfc & ZBEE_APS_FCF_FRAME_TYPE) != ZBEE_APS_FCF_CMD:
                 return
 
@@ -98,35 +98,35 @@ class ZigbeeSniffer():
             if (apsfc & ZBEE_APS_FCF_SECURITY) == 1:
                 return
 
-            zapspayload = zapschop[-1]
+            aps_payload = aps_chop[-1]
 
             # Check payload length, must be at least 35 bytes
             # APS cmd | key type | key | sequence number | dest addr | src addr
-            if len(zapspayload) < 35:
+            if len(aps_payload) < 35:
                 return
 
             # Check for APS command identifier Transport Key (0x05)
-            if ord(zapspayload[0]) != 5:
+            if ord(aps_payload[0]) != 5:
                 return
 
             # Transport Key Frame, get the key type.  Network Key is 0x01, no
             # other keys should be sent in plaintext
-            if ord(zapspayload[1]) != 1:
+            if ord(aps_payload[1]) != 1:
                 print("Possible key or false positive?")
                 return
 
             # Reverse these fields
-            networkkey = zapspayload[2:18][::-1]
-            destaddr = zapspayload[19:27][::-1]
-            srcaddr = zapspayload[27:35][::-1]
+            networkkey = aps_payload[2:18][::-1]
+            destaddr = aps_payload[19:27][::-1]
+            srcaddr = aps_payload[27:35][::-1]
             for x in networkkey[0:15]:
                 print("NETWORK KEY FOUND: ",
                 sys.stdout.write("%02x:" % ord(x)))
             print ("%02x" % ord(networkkey[15]))
-            for x in zapspayload[2:17]:
+            for x in aps_payload[2:17]:
                 print("      (Wireshark): ",
                 sys.stdout.write("%02x:" % ord(x)))
-            print("%02x" % ord(zapspayload[17]))
+            print("%02x" % ord(aps_payload[17]))
             for x in destaddr[0:7]:
                 print("  Destination MAC Address: ",
                 sys.stdout.write("%02x:" % ord(x)))
@@ -141,15 +141,14 @@ class ZigbeeSniffer():
             return
 
     def sniff_key(self):
-        #FIXME: Works with captured file, but not with sample file;
         print ("\nProcessing %s" % self.file)
         if not os.path.exists(self.file):
             print("ERROR: Input file \"%s\" does not exist." % self.file)
             # Check if the input file is libpcap; if not, assume SNA.
         cap = None
-        pr = None
+        pcap_reader = None
         try:
-            pr = PcapReader(self.file)
+            pcap_reader = PcapReader(self.file)
         except Exception as e:
             if e.args == ('Unsupported pcap header format or version',):
                 # Input file was not pcap, open it as SNA
@@ -157,7 +156,7 @@ class ZigbeeSniffer():
 
         # Following exception
         if cap is None:
-            cap = pr
+            cap = pcap_reader
         while 1:
             packet = cap.pnext()
             if packet[1] is None:

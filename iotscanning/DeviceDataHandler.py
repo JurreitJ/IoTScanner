@@ -5,15 +5,6 @@ Functions to read device from json file and save important data
 import json
 import sys
 
-
-def read_zbcfg(zbcfg):
-    try:
-        with open(zbcfg) as zbcfg_file:
-            return json.load(zbcfg_file)
-    except json.decoder.JSONDecodeError:
-        print("DataManager.py: Could not load zigbee configuration file.")
-        sys.exit(1)
-
 def read_devices(dev_config_input):
     try:
         with open(dev_config_input) as devConfigFile:
@@ -69,14 +60,3 @@ def retrieve_credentials_keys(device):
 def retrieve_next_url(device):
     return device['nextUrl']
 
-
-def retrieve_header_tag(device):
-    return device['header']['tag']
-
-
-def retrieve_header_pattern(device):
-    return device['header']['pattern'][1]
-
-
-def retrieve_header_comparison_operator(device):
-    return device['header']['pattern'][0]

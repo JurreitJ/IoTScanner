@@ -4,36 +4,58 @@ Functions to scan tcp ports, using nmap
 
 import nmap
 
+class PortScanner():
 
-def scan_ports(ip):
-    open_ports = dict()
-    scanner = nmap.PortScanner()
-    scanner.scan(ip, arguments="-sT -Pn")  # max port 65535; try -Pn if scan fails;
-    if scanner.all_hosts().__len__() == 0:
-        print("Could not find any hosts at ip:", ip)
-    else:
-        host_state = scanner[ip].state()
-        if host_state == "up":
-            ports = scanner[ip]['tcp'].keys()
-            for port in ports:
-                port_dict = scanner[ip]['tcp'][port]
-                if port_dict['state'] == 'open':
-                    print("Port ", port, " is open.")
-                    service = port_dict['name']
-                    if service == 'http':
-                        open_ports[port] = 'http'
-                    elif service == 'http-proxy':
-                        open_ports[port] = 'http'
-                    elif service == 'https':
-                        open_ports[port] = 'https'
-                    elif service == 'https-proxy':
-                        open_ports[port] = 'https'
-                    else:
-                        open_ports[port] = str(service)
-                else:
-                    print("Port ", port, " is ", port_dict['state'])
-            if not open_ports:
-                print("Could not find any open ports for host at ", ip)
+    def __init__(self):
+        self.open_ports = dict()
+
+    def scan_ports(self, ip):
+        scanner = nmap.PortScanner()
+        scanner.scan(ip, arguments="-sT -Pn")  # max port 65535; try -Pn if scan fails;
+        if scanner.all_hosts().__len__() == 0:
+            print("Could not find any hosts at ip:", ip)
         else:
-            print("Host at ip: ", ip, " is probably down. State is: ", host_state)
-    return open_ports
+            if self.is_up(scanner[ip]):
+                self.retrieve_open_ports_with_service(scanner[ip])
+            else:
+                print("Host at ip {0} is {1}.".format(ip, scanner[ip].state()))
+        if not self.open_ports:
+            print("Could not find any open ports for host at ", ip)
+        return self.open_ports
+
+
+    def retrieve_open_ports_with_service(self, host):
+        ports = host['tcp'].keys()
+        for port in ports:
+            port_data = host['tcp'][port]
+            if self.is_open(port_data):
+                print("Port {0} is open.".format(port))
+                service = port_data['name']
+                self.make_port_service_dict(service, port)
+            else:
+                print("Port {0} is [1}.".format(port, port_data['state']))
+
+
+    def make_port_service_dict(self, service, port):
+        if service == 'http':
+            self.open_ports[port] = 'http'
+        elif service == 'http-proxy':
+            self.open_ports[port] = 'http'
+        elif service == 'https':
+            self.open_ports[port] = 'https'
+        elif service == 'https-proxy':
+            self.open_ports[port] = 'https'
+        else:
+            self.open_ports[port] = str(service)
+
+    def is_open(self, port):
+        if port['state'] == 'open':
+            return True
+        else:
+            return False
+
+    def is_up(self, host):
+        if host.state() == "up":
+            return True
+        else:
+            return False

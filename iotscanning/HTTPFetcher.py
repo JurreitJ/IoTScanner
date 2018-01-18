@@ -4,13 +4,14 @@ Functions to handle http requests and responses
 
 import urllib.parse
 import urllib.request
+
 import iotscanning
 
 
 def fetch(url):
     try:
         response = urllib.request.urlopen(url)
-        if iotscanning.verbose:
+        if iotscanning.VERBOSE:
             print("Scanning", url, "...")
         return response
     except urllib.request.HTTPError as e:
@@ -29,14 +30,7 @@ def fetch_via_post(url_to_fetch, username, password):
                    "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US)"
                    " AppleWebKit/525.13 (KHTML, like Gecko)"
                    " Chrome/0.2.149.29 Safari/525.13")
-
-    try:
-        response_data = urllib.request.urlopen(url)
-        status = response_data.getcode()
-        return status
-    except urllib.request.HTTPError as e:
-        status = e.code
-        return status
+    return urllib.request.urlopen(url)
 
 
 def compose_url(ip, port):
