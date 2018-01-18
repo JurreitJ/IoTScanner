@@ -53,11 +53,11 @@ def check_http(ip, port):
     response = HTTPFetcher.fetch(url)
     http_check = HTTPCheck(url)
     if http_check.check_availability(response):
-        devtype = http_check.search_for_devtype(response)
-        if not devtype:
+        device = http_check.search_for_device(response)
+        if not device:
             print("No matching device found.")
         else:
-            http_check.check_login(devtype)
+            http_check.check_login(device)
 
 
 def check_ssh(ip, port):
