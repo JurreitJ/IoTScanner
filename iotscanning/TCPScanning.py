@@ -2,7 +2,9 @@ import iotscanning
 from iotscanning import HTTPFetcher
 from iotscanning import PortScanner
 from iotscanning import SSHCheck
-from iotscanning.HTTPCheck import HTTPCheck
+from iotscanning.HTTPDeviceFinder import HTTPDeviceFinder
+from iotscanning.LoginCheck import LoginCheck
+from iotscanning.ResponseHandler import ResponseHandler
 
 
 def tcp_requirements_met():
@@ -51,13 +53,15 @@ def check_http(ip, port):
         print("\nScanning http...")
     url = HTTPFetcher.compose_url(ip, port)
     response = HTTPFetcher.fetch(url)
-    http_check = HTTPCheck(url)
-    if http_check.check_availability(response):
-        device = http_check.search_for_device(response)
+    device_finder = HTTPDeviceFinder(url)
+    response_handler = ResponseHandler()
+    if response_handler.is_available(response):
+        device = device_finder.search_for_device(response)
         if not device:
             print("No matching device found.")
         else:
-            http_check.check_login(device)
+            login_check = LoginCheck(device, url)
+            login_check.check_login()
 
 
 def check_ssh(ip, port):
