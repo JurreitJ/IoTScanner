@@ -1,10 +1,3 @@
-'''
-Transmit beacon request frames to the broadcast address while
-channel hopping to identify ZigBee Coordinator/Router devices.
-
-Originally from killerbee, modified for zigbee scanner;
-'''
-
 import sys
 
 import iotscanning
@@ -12,6 +5,12 @@ from killerbee3 import *
 
 
 class ZigBeeDeviceFinder():
+    """
+    Transmit beacon request frames to the broadcast address while
+    channel hopping to identify ZigBee Coordinator/Router devices.
+
+    A substantial portion of this class was written by contributors of the killerbee framework.
+    """
     def __init__(self, devstring, loops, delay=2.0, channel = 11):
         self.delay = delay
         self.channel = channel
@@ -61,7 +60,7 @@ class ZigBeeDeviceFinder():
 
         print(("\tChannel: {0}".format(channel)))
 
-    def response_handler(self, packet):
+    def handle_response(self, packet):
         stumbled = {}
         d154 = Dot154PacketParser()
         # Chop the packet up
@@ -155,7 +154,7 @@ class ZigBeeDeviceFinder():
                     self.received_package_count += 1
                     if iotscanning.VERBOSE:
                         print("Received frame.")  # , time.time()-start
-                    networkdata = self.response_handler(recvpkt[0])
+                    networkdata = self.handle_response(recvpkt[0])
             seqnum += 1
             self.channel += 1
             self.kb.sniffer_off()

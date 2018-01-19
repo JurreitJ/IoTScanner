@@ -1,6 +1,9 @@
 import iotscanning
 
 class ResponseHandler():
+    """
+    Methods to handle html response.
+    """
 
     PAGE_NOT_FOUND = 404
     UNAUTHORIZED = 401
@@ -8,6 +11,11 @@ class ResponseHandler():
     CONNECTION_REFUSED = 595
 
     def is_available(self, response):
+        """
+        Checking the response message, to see if the page is generally available.
+        :param response: any
+        :return: bool
+        """
         if self.is_successful(response):
             return True
         elif response == self.UNAUTHORIZED:

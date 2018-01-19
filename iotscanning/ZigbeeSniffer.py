@@ -1,8 +1,3 @@
-'''
-Sniffing tool to sniff zigbee packets;
-Mostly copied from killerbees zbdump
-'''
-
 import signal
 import sys
 
@@ -11,6 +6,10 @@ from killerbee3 import *
 
 
 class ZigbeeSniffer():
+    """
+    Sniffing zigbee packets in a nearby zigbee network.
+    A substantial portion of this class was written by contributors of the killerbee framework.
+    """
     def __init__(self, file, devstring, channel=11, count=10):
         try:
             self.kb = KillerBee(device=devstring)
@@ -63,7 +62,6 @@ class ZigbeeSniffer():
         Look for the presence of the APS Transport Key command, revealing the
         network key value.
         """
-
         try:
             dot154_pkt_parser = Dot154PacketParser()
             zb_nwk_pkt_parser = ZigBeeNWKPacketParser()
