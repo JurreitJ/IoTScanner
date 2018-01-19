@@ -64,4 +64,4 @@ class DeviceDataHandler():
 
 
     def retrieve_next_url(self, device):
-        return device['next_url']
+        return device['nextUrl']

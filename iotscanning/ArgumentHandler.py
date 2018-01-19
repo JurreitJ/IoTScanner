@@ -1,7 +1,7 @@
 import argparse
 
 import iotscanning
-from iotscanning import DeviceDataHandler
+from iotscanning.DeviceDataHandler import DeviceDataHandler
 from iotscanning import IPHandler
 
 
@@ -71,7 +71,8 @@ class ArgumentHandler():
         :return: dict
         """
         if devices_cfg:
-            return DeviceDataHandler.read_devices(devices_cfg)
+            device_handler = DeviceDataHandler()
+            return device_handler.read_devices(devices_cfg)
         else:
             return None
 
