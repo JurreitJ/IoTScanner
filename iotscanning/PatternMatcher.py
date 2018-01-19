@@ -1,7 +1,9 @@
 import re
 
 class PatternMatcher():
-
+    """
+    Methods to check, if the given pattern matches the expected pattern.
+    """
     def is_header(self, field):
         if field == "header":
             return True

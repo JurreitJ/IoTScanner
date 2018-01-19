@@ -1,11 +1,14 @@
 from bs4 import BeautifulSoup
 
 import iotscanning
-from iotscanning import DeviceDataHandler
+from iotscanning.DeviceDataHandler import DeviceDataHandler
 from iotscanning.PatternMatcher import PatternMatcher
 
 
 class HTTPDeviceFinder:
+    """
+    Methods to identify the found device.
+    """
     def __init__(self, url):
         self.url = url
         self.response = None
@@ -18,6 +21,11 @@ class HTTPDeviceFinder:
 
 
     def search_for_device(self, response):
+        """
+        Searches html response for patterns, that match with patterns of the devices in the device data dictionary.
+        :param response:
+        :return: found device: str:
+        """
         self.response = response
         device_found = None
         for self.device_name in iotscanning.DEVICES["http"].keys():
@@ -34,6 +42,11 @@ class HTTPDeviceFinder:
             return device_found
 
     def check_header(self):
+        """
+        Check header field for matching patterns.
+        Returns True, if a matching pattern is found.
+        :return: bool
+        """
         headers = self.response.info()
         found_device = False
         for header in headers:
@@ -48,6 +61,11 @@ class HTTPDeviceFinder:
         return found_device
 
     def check_body(self):
+        """
+        Check html body for matching patterns.
+        Returns True, if a matching pattern is found.
+        :return: bool
+        """
         html = str(self.response.read())
         soup = BeautifulSoup(html, 'lxml')
         found_device = False
@@ -78,13 +96,14 @@ class HTTPDeviceFinder:
 
 
     def get_data(self, index):
+        device_handler = DeviceDataHandler()
         device = iotscanning.DEVICES["http"][index]
-        self.devtype_pattern = DeviceDataHandler.retrieve_device_pattern(device)
-        self.html_position = DeviceDataHandler.retrieve_html_position(self.devtype_pattern)
-        self.tag_name = DeviceDataHandler.retrieve_tag(self.devtype_pattern, self.html_position)
-        self.operator = DeviceDataHandler.retrieve_comparison_operator(self.devtype_pattern,
+        self.devtype_pattern = device_handler.retrieve_device_pattern(device)
+        self.html_position = device_handler.retrieve_html_position(self.devtype_pattern)
+        self.tag_name = device_handler.retrieve_tag(self.devtype_pattern, self.html_position)
+        self.operator = device_handler.retrieve_comparison_operator(self.devtype_pattern,
                                                                              self.html_position)
-        self.pattern = DeviceDataHandler.retrieve_comparison_pattern(self.devtype_pattern,
+        self.pattern = device_handler.retrieve_comparison_pattern(self.devtype_pattern,
                                                                            self.html_position)
 
 

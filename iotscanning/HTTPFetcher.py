@@ -1,7 +1,3 @@
-"""
-Functions to handle http requests and responses
-"""
-
 import urllib.parse
 import urllib.request
 

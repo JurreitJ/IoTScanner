@@ -6,7 +6,13 @@ from iotscanning import IPHandler
 
 
 class ArgumentHandler():
+    """
+    Handles command line arguments.
+    """
     def __init__(self):
+        """
+        Parses command line arguments into a python variable.
+        """
         _parser = argparse.ArgumentParser()
         _parser.add_argument('-i', '--ip', dest='ip_address', action='store', default=None,
                              help="IP address or IP address range to be scanned. Format: ['127.0.0.1' | '127.0.0.1,192.168.124.0' | '127.0.0.1-127.0.0.200']")
@@ -32,6 +38,10 @@ class ArgumentHandler():
         self.args = _parser.parse_args()
 
     def parse_arguments_to_constants(self):
+        """
+        Parses arguments into constants of the package.
+        :return: None
+        """
         iotscanning.IP_ADDRESS_LIST = self.__get_ip_addresses(self.args.ip_address)
         iotscanning.DEVICES = self.__get_devices(self.args.devices_cfg)
         iotscanning.ZB_CAPTURE_FILE = self.args.zb_capture_file
@@ -42,6 +52,10 @@ class ArgumentHandler():
         iotscanning.VERBOSE = self.args.verbose
 
     def print_arguments(self):
+        """
+        Prints the read arguments.
+        :return: None
+        """
         print('\nIPs are', iotscanning.IP_ADDRESS_LIST)
         print('Path to devices configuration file is', self.args.devices_cfg)
         print('Path to ZigBee capture file is', iotscanning.ZB_CAPTURE_FILE)
@@ -51,12 +65,22 @@ class ArgumentHandler():
         print('ZigBee channel is', iotscanning.ZB_CHANNEL)
 
     def __get_devices(self, devices_cfg):
+        """
+        Loads device data from the given configuration file.
+        :param devices_cfg:
+        :return: dict
+        """
         if devices_cfg:
             return DeviceDataHandler.read_devices(devices_cfg)
         else:
             return None
 
     def __get_ip_addresses(self, ip_address_string):
+        """
+        Get ip addresses in a list.
+        :param ip_address_string:
+        :return: list
+        """
         if ip_address_string:
             return IPHandler.get_ip_list(ip_address_string)
         else:

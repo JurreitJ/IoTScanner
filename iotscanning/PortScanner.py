@@ -5,7 +5,9 @@ Functions to scan tcp ports, using nmap
 import nmap
 
 class PortScanner():
-
+    """
+    Methods to scan given ip addresses, using nmap.
+    """
     def __init__(self):
         self.open_ports = dict()
 
@@ -25,6 +27,11 @@ class PortScanner():
 
 
     def retrieve_open_ports_with_service(self, host):
+        """
+        Finding open ports in the scan result.
+        :param host: dict
+        :return: None
+        """
         ports = host['tcp'].keys()
         for port in ports:
             port_data = host['tcp'][port]
@@ -37,6 +44,12 @@ class PortScanner():
 
 
     def make_port_service_dict(self, service, port):
+        """
+        Creates a dictionary of ports:service, using the scan results.
+        :param service: dict
+        :param port: int
+        :return: None
+        """
         if service == 'http':
             self.open_ports[port] = 'http'
         elif service == 'http-proxy':

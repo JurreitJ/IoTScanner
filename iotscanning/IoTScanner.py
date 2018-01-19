@@ -1,8 +1,3 @@
-"""
-Searches for web and ssh servers with default passwords
-and zigbee vulnerabilities in IoT devices
-"""
-
 import sys
 
 import iotscanning
@@ -12,6 +7,9 @@ from iotscanning.ArgumentHandler import ArgumentHandler
 
 
 def main():
+    """
+    This tool searches for vulnerabilities in SmartHome devices.
+    """
     argument_handler = ArgumentHandler()
     argument_handler.parse_arguments_to_constants()
     if iotscanning.VERBOSE:
