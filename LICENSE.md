@@ -1,3 +1,7 @@
+IoTScanning is provided under the BSD 3-Clause License, as listed at the end of the file.
+This license does not apply to the third-party content of the provided killerbee3 package.
+See /killerbee3/LICENSE.md for information on its applicable license.
+
 BSD 3-Clause License
 
 Copyright (c) 2018, Jennifer Jurreit
