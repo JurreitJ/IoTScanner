@@ -26,8 +26,8 @@ class TCPScanning():
         Performs tcp scanning for each given ip address.
         :return: None
         '''
-        port_scanner = PortScanner()
         for ip in iotscanning.IP_ADDRESS_LIST:
+            port_scanner = PortScanner()
             print("\nScanning hosts with ip {0} ...".format(ip))
             scan_results = port_scanner.scan_ports(ip)
             for port in scan_results.keys():
