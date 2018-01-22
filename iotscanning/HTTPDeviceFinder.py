@@ -38,8 +38,7 @@ class HTTPDeviceFinder:
                 device_found = device_name
                 break
         if device_found is not None:
-            if iotscanning.VERBOSE:
-                print("Device found:", device_found)
+            print("Device found:", device_found)
             return device_found
 
     def header_matches(self):
