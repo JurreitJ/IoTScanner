@@ -38,8 +38,8 @@ class ZigbeeSniffer():
             sys.exit(1)
         self.kb.set_channel(self.channel)
         self.kb.sniffer_on()
-        print(("\nListening on \'{0}\', link-type DLT_IEEE802_15_4, capture size 127 bytes".format(
-            self.kb.get_dev_info()[0])))
+        print(("\nListening on \'{0}\', link-type DLT_IEEE802_15_4, capture size 127 bytes, channel {1}".format(
+            self.kb.get_dev_info()[0], self.channel)))
 
         rf_freq_mhz = (self.channel - 10) * 5 + 2400
         while self.count != packetcount:
