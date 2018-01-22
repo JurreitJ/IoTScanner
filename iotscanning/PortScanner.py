@@ -32,15 +32,18 @@ class PortScanner():
         :param host: dict
         :return: None
         """
-        ports = host['tcp'].keys()
-        for port in ports:
-            port_data = host['tcp'][port]
-            if self.is_open(port_data):
-                print("Port {0} is open.".format(port))
-                service = port_data['name']
-                self.make_port_service_dict(service, port)
-            else:
-                print("Port {0} is [1}.".format(port, port_data['state']))
+        if 'tcp' in host.keys():
+            ports = host['tcp'].keys()
+            for port in ports:
+                port_data = host['tcp'][port]
+                if self.is_open(port_data):
+                    print("Port {0} is open.".format(port))
+                    service = port_data['name']
+                    self.make_port_service_dict(service, port)
+                else:
+                    print("Port {0} is [1}.".format(port, port_data['state']))
+        else:
+            print("All ports are closed or filtered.")
 
 
     def make_port_service_dict(self, service, port):
