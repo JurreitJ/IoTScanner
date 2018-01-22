@@ -67,10 +67,10 @@ class TCPScanning():
             print("\nScanning http...")
         url = HTTPFetcher.compose_url(ip, port)
         response = HTTPFetcher.fetch(url)
-        device_finder = HTTPDeviceFinder(url)
+        device_finder = HTTPDeviceFinder(response)
         response_handler = ResponseHandler()
         if response_handler.is_available(response):
-            device = device_finder.search_for_device(response)
+            device = device_finder.search_for_device()
             if not device:
                 print("No matching device found.")
             else:
