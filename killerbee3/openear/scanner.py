@@ -10,7 +10,7 @@ import sys
 import threading
 
 import gps
-from iotscanning.killerbee import *
+from iotscanner.killerbee import *
 
 # Globals
 session = ""

@@ -1,6 +1,6 @@
 import sys
 
-import iotscanning
+import iotscanner
 from killerbee3 import *
 
 
@@ -69,7 +69,7 @@ class ZigBeeDeviceFinder():
         fcf = struct.unpack("<H", pktdecode[0])[0]
         # Check if this is a beacon frame
         if (fcf & DOT154_FCF_TYPE_MASK) == DOT154_FCF_TYPE_BEACON:
-            if iotscanning.VERBOSE:
+            if iotscanner.VERBOSE:
                 print("Received frame is a beacon.")
 
             # The 6th element offset in the Dot154PacketParser.pktchop() method
@@ -83,14 +83,14 @@ class ZigBeeDeviceFinder():
             key = ''.join([spanid, source])
             value = [spanid, source, extpanid, stackprofilever, self.channel]
             if not key in stumbled:
-                if iotscanning.VERBOSE:
+                if iotscanner.VERBOSE:
                     print("Beacon represents new network.")
                 stumbled[key] = value
                 self.display_details(value)
             if not self.channel in self.devices_found:
                 self.devices_found.append(self.channel)
         else:
-            if iotscanning.VERBOSE:
+            if iotscanner.VERBOSE:
                 print(("Received frame is not a beacon (FCF={0}).".format(int.from_bytes(pktdecode[0], sys.byteorder))))
             if not self.channel in self.devices_found:
                 self.devices_found.append(self.channel)
@@ -120,7 +120,7 @@ class ZigBeeDeviceFinder():
             if seqnum > 255:
                 seqnum = 0
 
-            if iotscanning.VERBOSE:
+            if iotscanner.VERBOSE:
                 print(("Setting channel to {0}.".format(self.channel)))
             try:
                 self.kb.set_channel(self.channel)
@@ -128,7 +128,7 @@ class ZigBeeDeviceFinder():
                 print(("ERROR: Failed to set channel to {0}. ({1})".format(self.channel, e)))
                 sys.exit(-1)
 
-            if iotscanning.VERBOSE:
+            if iotscanner.VERBOSE:
                 print("Transmitting beacon request.")
 
             beaconinj = ''.join([beaconp1, "%c" % seqnum, beaconp2])
@@ -138,7 +138,7 @@ class ZigBeeDeviceFinder():
             start = time.time()
 
             try:
-                if iotscanning.VERBOSE:
+                if iotscanner.VERBOSE:
                     print("Injecting packet.")
                 self.transmitted_package_count += 1
                 self.kb.inject(beaconinj)
@@ -152,7 +152,7 @@ class ZigBeeDeviceFinder():
                 # Check for empty packet (timeout) and valid FCS
                 if recvpkt != None and recvpkt[1]:
                     self.received_package_count += 1
-                    if iotscanning.VERBOSE:
+                    if iotscanner.VERBOSE:
                         print("Received frame.")  # , time.time()-start
                     networkdata = self.handle_response(recvpkt[0])
             seqnum += 1

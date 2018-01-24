@@ -4,7 +4,7 @@
 # rmspeers 2010-13
 # ZigBee/802.15.4 WarDriving Platform
 
-from iotscanning.killerbee import KillerBee
+from iotscanner.killerbee import KillerBee
 from usb import USBError
 
 from killerbee3 import kbutils

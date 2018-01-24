@@ -1,9 +1,9 @@
 import sys
 
-import iotscanning
-from iotscanning.TCPScanning import TCPScanning
-from iotscanning import ZigbeeScanning
-from iotscanning.ArgumentHandler import ArgumentHandler
+import iotscanner
+from iotscanner import ZigbeeScanning
+from iotscanner.ArgumentHandler import ArgumentHandler
+from iotscanner.TCPScanning import TCPScanning
 
 
 def main():
@@ -13,7 +13,7 @@ def main():
     argument_handler = ArgumentHandler()
     argument_handler.parse_arguments_to_constants()
     tcp_scanning = TCPScanning()
-    if iotscanning.VERBOSE:
+    if iotscanner.VERBOSE:
         argument_handler.print_arguments()
     if tcp_scanning.tcp_requirements_met():
         tcp_scanning.scan_tcp()

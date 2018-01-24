@@ -1,8 +1,8 @@
 import re
 
-import iotscanning
-from iotscanning.ZigbeeDeviceFinder import ZigBeeDeviceFinder
-from iotscanning.ZigbeeSniffer import ZigbeeSniffer
+import iotscanner
+from iotscanner.ZigbeeDeviceFinder import ZigBeeDeviceFinder
+from iotscanner.ZigbeeSniffer import ZigbeeSniffer
 from killerbee3 import *
 
 
@@ -12,7 +12,7 @@ def __find_transceiver():
     for dev in kbutils.devlist():
         if re.match("^KILLERB", dev[1]):
             device = fmt.format(dev[0])
-    if iotscanning.VERBOSE:
+    if iotscanner.VERBOSE:
         print("Found hardware compatible with killerbee3:", device)
     return device
 
@@ -31,11 +31,11 @@ def __sniff(kbdevice, file, channel, packet_count):
 
 
 def scan_zb():
-    zb_capturefile = iotscanning.ZB_CAPTURE_FILE
-    zb_packet_count = iotscanning.ZB_PACKET_COUNT
-    zb_channel = iotscanning.ZB_CHANNEL
-    zb_loops = iotscanning.ZB_LOOPS
-    zb_delay = iotscanning.ZB_DELAY
+    zb_capturefile = iotscanner.ZB_CAPTURE_FILE
+    zb_packet_count = iotscanner.ZB_PACKET_COUNT
+    zb_channel = iotscanner.ZB_CHANNEL
+    zb_loops = iotscanner.ZB_LOOPS
+    zb_delay = iotscanner.ZB_DELAY
     kbdevice = __find_transceiver()
     if zb_channel:
         __sniff(kbdevice, zb_capturefile, zb_channel, zb_packet_count)
@@ -49,7 +49,7 @@ def scan_zb():
 
 
 def zb_requirements_met():
-    if iotscanning.ZB_CAPTURE_FILE:
+    if iotscanner.ZB_CAPTURE_FILE:
         return True
     else:
         return False

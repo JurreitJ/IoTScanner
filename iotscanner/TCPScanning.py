@@ -1,10 +1,11 @@
-import iotscanning
-from iotscanning import HTTPFetcher
-from iotscanning.PortScanner import PortScanner
-from iotscanning.LoginCheckSSH import LoginCheckSSH
-from iotscanning.HTTPDeviceFinder import HTTPDeviceFinder
-from iotscanning.LoginCheckHTTP import LoginCheckHTTP
-from iotscanning.ResponseHandler import ResponseHandler
+import iotscanner
+from iotscanner import HTTPFetcher
+from iotscanner.HTTPDeviceFinder import HTTPDeviceFinder
+from iotscanner.LoginCheckHTTP import LoginCheckHTTP
+from iotscanner.LoginCheckSSH import LoginCheckSSH
+from iotscanner.PortScanner import PortScanner
+from iotscanner.ResponseHandler import ResponseHandler
+
 
 class TCPScanning():
     """
@@ -15,7 +16,7 @@ class TCPScanning():
         Check if all required arguments were given.
         :return: bool
         """
-        if iotscanning.IP_ADDRESS_LIST and iotscanning.DEVICES:
+        if iotscanner.IP_ADDRESS_LIST and iotscanner.DEVICES:
             return True
         else:
             return False
@@ -26,7 +27,7 @@ class TCPScanning():
         Performs tcp scanning for each given ip address.
         :return: None
         '''
-        for ip in iotscanning.IP_ADDRESS_LIST:
+        for ip in iotscanner.IP_ADDRESS_LIST:
             port_scanner = PortScanner()
             print("\nScanning hosts with ip {0} ...".format(ip))
             scan_results = port_scanner.scan_ports(ip)
@@ -36,7 +37,7 @@ class TCPScanning():
                 elif self.is_ssh(scan_results[port]):
                     self.check_ssh(ip, port)
                 else:
-                    if iotscanning.VERBOSE:
+                    if iotscanner.VERBOSE:
                         print("Could not check port {0} because the service {1} is not supported.".format(port, scan_results[
                             port]))
         print("-------------------------------------------------")
@@ -63,7 +64,7 @@ class TCPScanning():
         :param port: int
         :return: None
         """
-        if iotscanning.VERBOSE:
+        if iotscanner.VERBOSE:
             print("\nScanning http...")
         url = HTTPFetcher.compose_url(ip, port)
         response = HTTPFetcher.fetch(url)
@@ -85,20 +86,20 @@ class TCPScanning():
         :param port: int
         :return: None
         """
-        if iotscanning.VERBOSE:
+        if iotscanner.VERBOSE:
             print("\nScanning ssh...")
         login_possible = False
         brute_force_successful = False
         login_check = LoginCheckSSH()
-        for login in iotscanning.DEVICES['ssh']['list']:
-            login_possible = login_check.login_check(ip, port, iotscanning.DEVICES['ssh']['list'][login]['username'],
-                                                       iotscanning.DEVICES['ssh']['list'][login]['password'])
+        for login in iotscanner.DEVICES['ssh']['list']:
+            login_possible = login_check.login_check(ip, port, iotscanner.DEVICES['ssh']['list'][login]['username'],
+                                                     iotscanner.DEVICES['ssh']['list'][login]['password'])
             if login_possible:
                 break
         if not login_possible:
-            for wordlist in iotscanning.DEVICES['ssh']['wordlists']:
+            for wordlist in iotscanner.DEVICES['ssh']['wordlists']:
                 brute_force_successful = login_check.bruteforce_ssh(ip, port,
-                                                                      iotscanning.DEVICES['ssh']['wordlists'][wordlist])
+                                                                    iotscanner.DEVICES['ssh']['wordlists'][wordlist])
                 if brute_force_successful:
                     break
             if not brute_force_successful:

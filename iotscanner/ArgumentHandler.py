@@ -1,8 +1,8 @@
 import argparse
 
-import iotscanning
-from iotscanning.DeviceDataHandler import DeviceDataHandler
-from iotscanning import IPHandler
+import iotscanner
+from iotscanner import IPHandler
+from iotscanner.DeviceDataHandler import DeviceDataHandler
 
 
 class ArgumentHandler():
@@ -42,27 +42,27 @@ class ArgumentHandler():
         Parses arguments into constants of the package.
         :return: None
         """
-        iotscanning.IP_ADDRESS_LIST = self.__get_ip_addresses(self.args.ip_address)
-        iotscanning.DEVICES = self.__get_devices(self.args.devices_cfg)
-        iotscanning.ZB_CAPTURE_FILE = self.args.zb_capture_file
-        iotscanning.ZB_LOOPS = self.args.zb_loops
-        iotscanning.ZB_DELAY = self.args.zb_delay
-        iotscanning.ZB_PACKET_COUNT = self.args.zb_packet_count
-        iotscanning.ZB_CHANNEL = self.args.zb_channel
-        iotscanning.VERBOSE = self.args.verbose
+        iotscanner.IP_ADDRESS_LIST = self.__get_ip_addresses(self.args.ip_address)
+        iotscanner.DEVICES = self.__get_devices(self.args.devices_cfg)
+        iotscanner.ZB_CAPTURE_FILE = self.args.zb_capture_file
+        iotscanner.ZB_LOOPS = self.args.zb_loops
+        iotscanner.ZB_DELAY = self.args.zb_delay
+        iotscanner.ZB_PACKET_COUNT = self.args.zb_packet_count
+        iotscanner.ZB_CHANNEL = self.args.zb_channel
+        iotscanner.VERBOSE = self.args.verbose
 
     def print_arguments(self):
         """
         Prints the read arguments.
         :return: None
         """
-        print('\nIPs are', iotscanning.IP_ADDRESS_LIST)
+        print('\nIPs are', iotscanner.IP_ADDRESS_LIST)
         print('Path to devices configuration file is', self.args.devices_cfg)
-        print('Path to ZigBee capture file is', iotscanning.ZB_CAPTURE_FILE)
-        print('ZigBee device search loops are', iotscanning.ZB_LOOPS)
-        print('ZigBee beacon request delay is', iotscanning.ZB_DELAY)
-        print('ZigBee packet count is', iotscanning.ZB_PACKET_COUNT)
-        print('ZigBee channel is', iotscanning.ZB_CHANNEL)
+        print('Path to ZigBee capture file is', iotscanner.ZB_CAPTURE_FILE)
+        print('ZigBee device search loops are', iotscanner.ZB_LOOPS)
+        print('ZigBee beacon request delay is', iotscanner.ZB_DELAY)
+        print('ZigBee packet count is', iotscanner.ZB_PACKET_COUNT)
+        print('ZigBee channel is', iotscanner.ZB_CHANNEL)
 
     def __get_devices(self, devices_cfg):
         """

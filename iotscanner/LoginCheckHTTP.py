@@ -1,9 +1,10 @@
-import iotscanning
-from iotscanning import HTTPFetcher
-from iotscanning.DeviceDataHandler import DeviceDataHandler
-from iotscanning.ResponseHandler import ResponseHandler
-import urllib.response
 import urllib.request
+import urllib.response
+
+import iotscanner
+from iotscanner import HTTPFetcher
+from iotscanner.DeviceDataHandler import DeviceDataHandler
+from iotscanner.ResponseHandler import ResponseHandler
 
 
 class LoginCheckHTTP():
@@ -11,7 +12,7 @@ class LoginCheckHTTP():
     Methods to check, logging into the device with  HTTP login methods.
     """
     def __init__(self, device_name, url):
-        self.device = iotscanning.DEVICES["http"][device_name]
+        self.device = iotscanner.DEVICES["http"][device_name]
         device_handler = DeviceDataHandler()
         self.auth_type = device_handler.retrieve_auth_type(self.device)
         self.credentials_keys = device_handler.retrieve_credentials_keys(self.device)
@@ -29,7 +30,7 @@ class LoginCheckHTTP():
             elif self.is_authtype_basic():
                 self.check_basic_login()
         else:
-            if iotscanning.VERBOSE:
+            if iotscanner.VERBOSE:
                 print("Checking login is not possible, due to missing information.")
 
 

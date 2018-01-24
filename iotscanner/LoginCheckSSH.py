@@ -1,6 +1,7 @@
 import paramiko
 
-import iotscanning
+import iotscanner
+
 
 class LoginCheckSSH():
     """
@@ -28,7 +29,7 @@ class LoginCheckSSH():
             print("SSH login with standard credentials, username: {0} and password: {1} is possible.".format(username,
                                                                                                                password))
         except Exception as e:
-            if iotscanning.VERBOSE:
+            if iotscanner.VERBOSE:
                 print(e, "username: ", username, "password: ", password)
         ssh.close()
         return login_possible
@@ -57,7 +58,7 @@ class LoginCheckSSH():
                 print("SSH login with standard credentials, username: {0} and password: {1} is possible.".format(username, password))
                 break
             except Exception as e:
-                if iotscanning.VERBOSE:
+                if iotscanner.VERBOSE:
                     print(e, "username: ", username, "password: ", password)
             ssh.close()
         return login_possible

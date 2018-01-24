@@ -1,13 +1,13 @@
 import urllib.parse
 import urllib.request
 
-import iotscanning
+import iotscanner
 
 
 def fetch(url):
     try:
         response = urllib.request.urlopen(url)
-        if iotscanning.VERBOSE:
+        if iotscanner.VERBOSE:
             print("Scanning", url, "...")
         return response
     except urllib.request.HTTPError as e:

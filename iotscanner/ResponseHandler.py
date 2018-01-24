@@ -1,4 +1,4 @@
-import iotscanning
+import iotscanner
 
 class ResponseHandler():
     """
@@ -21,15 +21,15 @@ class ResponseHandler():
         elif response == self.UNAUTHORIZED:
             return True
         elif response == self.PAGE_NOT_FOUND:
-            if iotscanning.VERBOSE:
+            if iotscanner.VERBOSE:
                 print("Got 404 response.")
             return False
         elif response == self.CONNECTION_REFUSED:
-            if iotscanning.VERBOSE:
+            if iotscanner.VERBOSE:
                 print("Failed to establish TCP connection.")
             return False
         else:
-            if iotscanning.VERBOSE:
+            if iotscanner.VERBOSE:
                 print("unexpected status code:", response)
             return False
 

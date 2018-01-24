@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 
-import iotscanning
-from iotscanning.DeviceDataHandler import DeviceDataHandler
-from iotscanning.PatternMatcher import PatternMatcher
+import iotscanner
+from iotscanner.DeviceDataHandler import DeviceDataHandler
+from iotscanner.PatternMatcher import PatternMatcher
 
 
 class HTTPDeviceFinder:
@@ -29,7 +29,7 @@ class HTTPDeviceFinder:
         :return: found device: str:
         """
         device_found = None
-        for device_name in iotscanning.DEVICES["http"].keys():
+        for device_name in iotscanner.DEVICES["http"].keys():
             self.get_data(device_name)
             if self.pattern_matcher.is_header(self.html_position) and self.header_matches():
                 device_found = device_name
@@ -94,7 +94,7 @@ class HTTPDeviceFinder:
 
     def get_data(self, index):
         device_handler = DeviceDataHandler()
-        device = iotscanning.DEVICES["http"][index]
+        device = iotscanner.DEVICES["http"][index]
         self.devtype_pattern = device_handler.retrieve_device_pattern(device)
         self.html_position = device_handler.retrieve_html_position(self.devtype_pattern)
         self.tag_name = device_handler.retrieve_tag(self.devtype_pattern, self.html_position)
