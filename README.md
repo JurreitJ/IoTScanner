@@ -67,7 +67,9 @@ Currently, this hardware is supported for beta, and supports sniffing only.
 This device can be loaded with the KillerBee firmware via USB. 
 To do that, follow the instructions below:
     1. Attach the device
+    
     2. Within killerbee/firmware, run:
+    
        $ ./flash_telosb.sh
  
 Though, some vendors claim, that their clone of this hardware is compatible with KillerBee, it has not been tested by River Loop Security or me.
