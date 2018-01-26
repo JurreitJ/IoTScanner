@@ -2,6 +2,7 @@
 as listed at the end of the file. 
 
 \# This license does not apply to the third-party content of the provided killerbee3 package.
+
 \# See https://github.com/JurreitJ/IoTScanning/blob/master/killerbee3/LICENSE.md for information on its applicable license.
 
                     
