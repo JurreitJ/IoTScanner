@@ -47,35 +47,31 @@ Currently, the KillerBee framework supports the River Loop ApiMote, Atmel RZ RAV
 IoTScanner should work fine with all of these. It was, however, only tested with Atmel RZ RAVEN USB Stick. 
 
 **ApiMote v4beta (and v3)**:
-The devices typically come preloaded and do not need to be reflashed for basic use.
-
-The hardware is open-source at https://github.com/riverloopsec/apimote. It is available assembled by contacting team at riverloopsecurity dot com.
-
-This is currently supported for beta, and supports sniffing, injection, and jamming.
-
-**Texas Instruments CC2530/1 EMK**:
-This USB dongle is produced by Texas Instruments and is sold as an evaluation kit for their CC2530 or CC2531 integrated circuit.
-
-It can be purchased from electronics distributors, or directly from them here.
-
-This is currently supported for beta, and supports sniffing only.
-
-**MoteIV Tmote Sky or TelosB mode**:
-This device can be loaded with firmware via USB. Attach the device, and then within killerbee/firmware, run:
-
-$ ./flash_telosb.sh
-These boards can be obtained via multiple distributors, however this vendor has stated that their "clone" of the original hardware is compatible. We have not tested nor do we endorse any specific "clone".
+The hardware is open-source. It was developed by River Loop Security and can be purchased at https://github.com/riverloopsec/apimote.
+It does not need to be flashed, because it comes pre-configured with the KillerBee firmware.
+Currently, the device is supported for beta, and supports sniffing, injection, and jamming.
 
 **Atmel RZ RAVEN USB Stick**:
-See http://www.atmel.com/tools/RZUSBSTICK.aspx. This hardware is convenient as the base firmware is open source with a freely-available IDE. The KillerBee firmware for the RZ RAVEN included in the firmware/ directory is a modified version of the stock firmware distributed by Atmel to include attack functionality.
+The RZ RAVEN USB Stick is available from most electronic resellers for approximately $40/USD.
+For more information on the hardware see http://www.microchip.com/Developmenttools/ProductDetails.aspx?PartNO=ATAVRRZUSBSTICK.
 
-The RZ RAVEN USB Stick is available from common electronics resellers for approximately $40/USD:
+In order to get the full functionality included in KillerBee, the RZ RAVEN USB Stick must be flashed with the custom firmware. See https://github.com/riverloopsec/killerbee/blob/master/firmware/README.md for details.
+This device can be flashed, using USB.
+The KillerBee firmware for the RZ RAVEN, that can be downloaded with the River Loop Security's KillerBee distribution, is a modified version of the stock firmware distributed by Atmel to include attack functionality.
 
-Mouser: http://bit.ly/vZ2pt
-Digi-Key: http://bit.ly/3T8MaK
-The stock firmware shipped with this hardware allows you to leverage the passive functionality included in the KillerBee tools and framework (such as receiving frames), but does not allow you to do packet injection, or to impersonate devices on the network.
+**Texas Instruments CC2530/1 EMK**:
+This USB dongle is produced by Texas Instruments. It is sold as an evaluation kit for their CC2530 or CC2531 integrated circuit.
+Currently, this hardware is supported for beta, and supports sniffing only.
 
-In order to get the full functionality included in KillerBee, the RZ RAVEN USB Stick must be flashed with the custom firmware included in the firmware/ directory. See https://github.com/riverloopsec/killerbee/blob/master/firmware/README.md for details.
+**MoteIV Tmote Sky or TelosB mode**:
+This device can be loaded with the KillerBee firmware via USB. 
+To do that, follow the instructions below:
+    1. Attach the device
+    2. Within killerbee/firmware, run:
+       $ ./flash_telosb.sh
+ 
+Though, some vendors claim, that their clone of this hardware is compatible with KillerBee, it has not been tested by River Loop Security or me.
+
 
 # Installation
 
