@@ -95,7 +95,7 @@ The example below demonstrates, how IoTScanner is used to scan TCP/IP networks, 
 
 Example:
 -
-\#sudo python3 IoTScanner.py -cf /samples/test_all.pcap -i 192.168.170.0 -f /configs/devices.cfg -v
+    #sudo python3 IoTScanner.py -cf /samples/test_all.pcap -i 192.168.170.0 -f /configs/devices.cfg -v
 
 Required parameters for network scans:
 -
