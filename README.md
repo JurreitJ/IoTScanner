@@ -16,13 +16,13 @@ For this, it is necessary to install the following Python modules before install
 
 On Ubuntu systems, you can install the needed dependencies with the following commands:
 
-\# apt-get install python-gtk2 python-cairo python-usb python-crypto python-serial python-dev libgcrypt-dev
+    \# apt-get install python-gtk2 python-cairo python-usb python-crypto python-serial python-dev libgcrypt-dev
 
-\# hg clone https://bitbucket.org/secdev/scapy-com
+    \# hg clone https://bitbucket.org/secdev/scapy-com
 
-\# cd scapy-com
+    \# cd scapy-com
 
-\# python setup.py install
+    \# python setup.py install
 
 The python-dev and libgcrypt are required for the Scapy Extension Patch.
 
@@ -66,6 +66,7 @@ Currently, this hardware is supported for beta, and supports sniffing only.
 **MoteIV Tmote Sky or TelosB mode**:
 This device can be loaded with the KillerBee firmware via USB. 
 To do that, follow the instructions below:
+    
     1. Attach the device
     
     2. Within killerbee/firmware, run:
@@ -79,11 +80,13 @@ Though, some vendors claim, that their clone of this hardware is compatible with
 
 To install IoTScanner, follow the list of steps below.
 
-1. Make sure, that all requirements are met
-2. Download and unzip IoTScanner
-3. Install IoTScanner, using setup.py
+    1. Make sure, that all requirements are met
     
-    \# python3 setup.py install
+    2. Download and unzip IoTScanner
+    
+    3. Install IoTScanner, using setup.py
+    
+        \# python3 setup.py install
 
 # Usage
 
