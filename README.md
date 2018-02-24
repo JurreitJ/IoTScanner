@@ -108,7 +108,7 @@ Required parameters for zigbee scanning:
 
 Optional parameters for zigbee scanning:
 -
-- -c : Channel to sniff; If nothing is specified, IoTScanner searches for aöö nearby zigbee devices and uses their channels
+- -c : Channel to sniff; If nothing is specified, IoTScanner searches for all nearby zigbee devices and uses their channels
 - -p : Number of packets, to be captured; Default 100
 - -d : Delay of sent beacon requests; Default 2.0
 - -l : Number of loops for network search
