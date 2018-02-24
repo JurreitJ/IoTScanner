@@ -99,7 +99,7 @@ Example:
 
 Required parameters for network scans:
 -
-- -c : Path to configuration file, containing device data
+- -f : Path to configuration file, containing device data
 - -i : IP addresses to scan (format: "192.168.170.0-192.168.170.255" or "192.168.170.0" or "192.168.170.0, 192.168.170.101")
 
 Required parameters for zigbee scanning:
