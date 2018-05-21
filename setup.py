@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='iotscanner',
-      version='0.1',
+      version='1.0',
       description='Pentesting tool to scan iot devices.',
       url='http://github.com/JurreitJ/IoTScanning',
       author='Jennifer Jurreit',
